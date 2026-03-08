@@ -16,12 +16,6 @@ public class GrupoDAO extends AbstractDAO<Grupo> {
         this.entityManager = em;
     }
 
-    public List<Grupo> obtenerTodos(){
-        return entityManager
-                .createQuery("SELECT a FROM Profesor a", Grupo.class)
-                .getResultList();
-    }
-
     @Override
     public EntityManager getEntityManager() {
         return entityManager;

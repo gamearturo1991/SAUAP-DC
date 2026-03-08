@@ -1,6 +1,7 @@
 package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import mx.DC.persistence.AbstractDAO;
 import mx.DC.entity.Usuario;
 
@@ -14,10 +15,15 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
         this.entityManager = em;
     }
 
-    public List<Usuario> obtenerTodos(){
-        return entityManager
-                .createQuery("SELECT u FROM Usuario u", Usuario.class)
-                .getResultList();
+    public Usuario findByNombreUsuario(String nombreUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombre", Usuario.class)
+                    .setParameter("nombre", nombreUsuario)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

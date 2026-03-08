@@ -15,12 +15,6 @@ public class PersonaDAO extends AbstractDAO<Persona> {
         this.entityManager = em;
     }
 
-    public List<Persona> obtenerTodos(){
-        return entityManager
-                .createQuery("SELECT a FROM Profesor a",Persona.class)
-                .getResultList();
-    }
-
     @Override
     public EntityManager getEntityManager() {
         return entityManager;

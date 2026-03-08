@@ -2,7 +2,7 @@ package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
 import mx.DC.persistence.AbstractDAO;
-import mx.DC.entity.AlumnoDao;
+import mx.DC.entity.Alumno;
 
 import java.util.List;
 

@@ -6,8 +6,9 @@
 package mx.DC.integration;
 
 import jakarta.persistence.EntityManager;
-import mx.avanti.desarollo.dao.*;
-import mx.avanti.desarollo.persistence.HibernateUtil;
+import mx.DC.DAO.AlumnoDAO;
+import mx.DC.DAO.UsuarioDAO;
+import mx.DC.persistence.HibernateUtil;
 
 
 /**

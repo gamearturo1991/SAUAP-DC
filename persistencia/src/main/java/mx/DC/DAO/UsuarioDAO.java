@@ -1,8 +1,8 @@
 package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
-import mx.avanti.desarollo.persistence.AbstractDAO;
-import mx.avanti.entidad.Usuario;
+import mx.DC.persistence.AbstractDAO;
+import mx.DC.entity.Usuario;
 
 import java.util.List;
 

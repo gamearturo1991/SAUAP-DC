@@ -6,8 +6,10 @@
 package mx.DC.integration;
 
 import jakarta.persistence.EntityManager;
-import mx.avanti.desarollo.dao.*;
-import mx.avanti.desarollo.persistence.HibernateUtil;
+import mx.DC.DAO.ProfesorDAO;
+import mx.DC.DAO.UsuarioDAO;
+import mx.DC.entity.Profesor;
+import mx.DC.persistence.HibernateUtil;
 
 
 /**
@@ -16,7 +18,7 @@ import mx.avanti.desarollo.persistence.HibernateUtil;
  */
 public class ServiceLocator {
 
-    private static AlumnoDAO alumnoDAO;
+    private static ProfesorDAO profesorDAO;
     private static UsuarioDAO usuarioDAO;
 
     private static EntityManager getEntityManager(){
@@ -26,12 +28,12 @@ public class ServiceLocator {
     /**
      * se crea la instancia para alumno DAO si esta no existe
      */
-    public static AlumnoDAO getInstanceAlumnoDAO(){
-        if(alumnoDAO == null){
-            alumnoDAO = new AlumnoDAO(getEntityManager());
-            return alumnoDAO;
+    public static ProfesorDAO getInstanceAlumnoDAO(){
+        if(profesorDAO == null){
+           profesorDAO = new ProfesorDAO(getEntityManager());
+            return profesorDAO;
         } else{
-            return alumnoDAO;
+            return profesorDAO;
         }
     }
     /**

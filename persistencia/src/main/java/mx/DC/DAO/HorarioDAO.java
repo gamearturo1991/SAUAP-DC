@@ -1,6 +1,7 @@
 package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
+import mx.DC.entity.AsignacionDocente;
 import mx.DC.persistence.AbstractDAO;
 import mx.DC.entity.Horario;
 
@@ -15,9 +16,10 @@ public class HorarioDAO extends AbstractDAO<Horario> {
         this.entityManager = em;
     }
 
-    public List<Horario> obtenerTodos(){
-        return entityManager
-                .createQuery("SELECT a FROM Profesor a", Horario.class)
+    public List<Horario> findByAsignacion(AsignacionDocente asignacion) {
+        EntityManager em = getEntityManager();
+        return em.createQuery("SELECT h FROM Horario h WHERE h.idAsignacionDocente = :asignacion", Horario.class)
+                .setParameter("asignacion", asignacion)
                 .getResultList();
     }
 

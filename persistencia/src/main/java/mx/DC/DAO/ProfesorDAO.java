@@ -1,6 +1,7 @@
 package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import mx.DC.persistence.AbstractDAO;
 import mx.DC.entity.Profesor;
 
@@ -19,6 +20,16 @@ public class ProfesorDAO extends AbstractDAO<Profesor> {
         return entityManager
                 .createQuery("SELECT a FROM Profesor a", Profesor.class)
                 .getResultList();
+    }
+    public Profesor findByRFC(String rfc) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Profesor p WHERE p.rfc = :rfc", Profesor.class)
+                    .setParameter("rfc", rfc)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package mx.DC.DAO;
 
 import jakarta.persistence.EntityManager;
+import mx.DC.entity.Profesor;
 import mx.DC.persistence.AbstractDAO;
 import mx.DC.entity.AsignacionDocente;
 
@@ -15,9 +16,10 @@ public class AsignacionDocenteDAO extends AbstractDAO<AsignacionDocente> {
         this.entityManager = em;
     }
 
-    public List<AsignacionDocente> obtenerTodos(){
-        return entityManager
-                .createQuery("SELECT a FROM Profesor a", AsignacionDocente.class)
+    public List<AsignacionDocente> findByProfesor(Profesor profesor) {
+        EntityManager em = getEntityManager();
+        return em.createQuery("SELECT a FROM AsignacionDocente a WHERE a.idProfesor = :profesor", AsignacionDocente.class)
+                .setParameter("profesor", profesor)
                 .getResultList();
     }
 

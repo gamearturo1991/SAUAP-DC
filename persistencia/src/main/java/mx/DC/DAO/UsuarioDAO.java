@@ -16,9 +16,8 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
     }
 
     public Usuario findByNombreUsuario(String nombreUsuario) {
-        EntityManager em = getEntityManager();
         try {
-            return em.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombre", Usuario.class)
+            return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombre", Usuario.class)
                     .setParameter("nombre", nombreUsuario)
                     .getSingleResult();
         } catch (NoResultException e) {

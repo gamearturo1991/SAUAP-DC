@@ -20,8 +20,7 @@ public class Horario {
     private AsignacionDocente idAsignacionDocente;
 
     @NotNull
-    @Lob
-    @Column(name = "dia_semana", nullable = false)
+    @Column(name = "dia_semana", nullable = false, length = 20)
     private String diaSemana;
 
     @NotNull

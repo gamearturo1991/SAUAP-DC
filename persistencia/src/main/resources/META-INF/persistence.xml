@@ -13,6 +13,8 @@
     <class>mx.DC.entity.Grupo</class>
     <class>mx.DC.entity.Persona</class>
     <class>mx.DC.entity.Profesor</class>
+    <class>mx.DC.entity.Horario</class>
+    <class>mx.DC.entity.Usuario</class>
 
 
     <properties>

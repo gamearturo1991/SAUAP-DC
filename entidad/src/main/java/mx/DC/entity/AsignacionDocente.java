@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "asignacion_docente")
@@ -99,4 +101,9 @@ public class AsignacionDocente {
         this.tipoContrato = tipoContrato;
     }
 
+    @OneToMany(mappedBy = "idAsignacionDocente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Horario> horarios = new ArrayList<>();
+
+    public List<Horario> getHorarios() { return horarios; }
+    public void setHorarios(List<Horario> horarios) { this.horarios = horarios; }
 }

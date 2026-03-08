@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>entidad</module>
+        <module>persistencia</module>
     </modules>
 
 
@@ -18,5 +19,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
 </project>

@@ -1,0 +1,316 @@
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>mx.SAUAP-DC.desarrollo</groupId>\r\n    <artifactId>SAUAP-DC</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n    <packaging>pom</packaging>\r\n    <modules>\r\n        <module>entidad</module>\r\n        <module>persistencia</module>\r\n    </modules>\r\n\r\n\r\n    <properties>\r\n        <maven.compiler.source>21</maven.compiler.source>\r\n        <maven.compiler.target>21</maven.compiler.target>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n    </properties>\r\n\r\n\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/pom.xml	(date 1773009365529)
+@@ -11,6 +11,7 @@
+     <modules>
+         <module>entidad</module>
+         <module>persistencia</module>
++        <module>negocio</module>
+     </modules>
+ 
+ 
+Index: persistencia/src/main/java/mx/DC/integration/ServiceLocator.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * To change this license header, choose License Headers in Project Properties.\r\n * To change this template file, choose Tools | Templates\r\n * and open the template in the editor.\r\n */\r\npackage mx.DC.integration;\r\n\r\nimport jakarta.persistence.EntityManager;\r\nimport mx.DC.DAO.AlumnoDAO;\r\nimport mx.DC.DAO.UsuarioDAO;\r\nimport mx.DC.persistence.HibernateUtil;\r\n\r\n\r\n/**\r\n *\r\n * @author total\r\n */\r\npublic class ServiceLocator {\r\n\r\n    private static AlumnoDAO alumnoDAO;\r\n    private static UsuarioDAO usuarioDAO;\r\n\r\n    private static EntityManager getEntityManager(){\r\n        return HibernateUtil.getEntityManager();\r\n    }\r\n\r\n    /**\r\n     * se crea la instancia para alumno DAO si esta no existe\r\n     */\r\n    public static AlumnoDAO getInstanceAlumnoDAO(){\r\n        if(alumnoDAO == null){\r\n            alumnoDAO = new AlumnoDAO(getEntityManager());\r\n            return alumnoDAO;\r\n        } else{\r\n            return alumnoDAO;\r\n        }\r\n    }\r\n    /**\r\n     * se crea la instancia de usuarioDAO si esta no existe\r\n     */\r\n    public static UsuarioDAO getInstanceUsuarioDAO(){\r\n        if(usuarioDAO == null){\r\n            usuarioDAO = new UsuarioDAO(getEntityManager());\r\n            return usuarioDAO;\r\n        } else{\r\n            return usuarioDAO;\r\n        }\r\n    }\r\n    \r\n}\r\n
+===================================================================
+diff --git a/persistencia/src/main/java/mx/DC/integration/ServiceLocator.java b/persistencia/src/main/java/mx/DC/integration/ServiceLocator.java
+--- a/persistencia/src/main/java/mx/DC/integration/ServiceLocator.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/persistencia/src/main/java/mx/DC/integration/ServiceLocator.java	(date 1773009394337)
+@@ -6,8 +6,9 @@
+ package mx.DC.integration;
+ 
+ import jakarta.persistence.EntityManager;
+-import mx.DC.DAO.AlumnoDAO;
++import mx.DC.DAO.ProfesorDAO;
+ import mx.DC.DAO.UsuarioDAO;
++import mx.DC.entity.Profesor;
+ import mx.DC.persistence.HibernateUtil;
+ 
+ 
+@@ -17,7 +18,7 @@
+  */
+ public class ServiceLocator {
+ 
+-    private static AlumnoDAO alumnoDAO;
++    private static ProfesorDAO profesorDAO;
+     private static UsuarioDAO usuarioDAO;
+ 
+     private static EntityManager getEntityManager(){
+@@ -27,12 +28,12 @@
+     /**
+      * se crea la instancia para alumno DAO si esta no existe
+      */
+-    public static AlumnoDAO getInstanceAlumnoDAO(){
+-        if(alumnoDAO == null){
+-            alumnoDAO = new AlumnoDAO(getEntityManager());
+-            return alumnoDAO;
++    public static ProfesorDAO getInstanceAlumnoDAO(){
++        if(profesorDAO == null){
++           profesorDAO = new ProfesorDAO(getEntityManager());
++            return profesorDAO;
+         } else{
+-            return alumnoDAO;
++            return profesorDAO;
+         }
+     }
+     /**
+Index: entidad/src/main/java/mx/DC/entity/Usuario.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mx.DC.entity;\r\n\r\nimport jakarta.persistence.Column;\r\nimport jakarta.persistence.Entity;\r\nimport jakarta.persistence.GeneratedValue;\r\nimport jakarta.persistence.GenerationType;\r\nimport jakarta.persistence.Id;\r\nimport jakarta.persistence.Table;\r\n\r\n@Entity\r\n@Table(name = \"usuario\")\r\npublic class Usuario {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    @Column(name = \"id_usuario\", nullable = false)\r\n    private Integer id;\r\n\r\n    @Column(name = \"nombre_usuario\", length = 100)\r\n    private String nombreUsuario;\r\n\r\n    public Integer getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Integer id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getNombreUsuario() {\r\n        return nombreUsuario;\r\n    }\r\n\r\n    public void setNombreUsuario(String nombreUsuario) {\r\n        this.nombreUsuario = nombreUsuario;\r\n    }\r\n}\r\n\r\n
+===================================================================
+diff --git a/entidad/src/main/java/mx/DC/entity/Usuario.java b/entidad/src/main/java/mx/DC/entity/Usuario.java
+--- a/entidad/src/main/java/mx/DC/entity/Usuario.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/entidad/src/main/java/mx/DC/entity/Usuario.java	(date 1773009395564)
+@@ -1,11 +1,8 @@
+ package mx.DC.entity;
+ 
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.Table;
++import jakarta.persistence.*;
++import jakarta.validation.constraints.NotNull;
++import jakarta.validation.constraints.Size;
+ 
+ @Entity
+ @Table(name = "usuario")
+@@ -15,9 +12,25 @@
+     @Column(name = "id_usuario", nullable = false)
+     private Integer id;
+ 
+-    @Column(name = "nombre_usuario", length = 100)
++    @Size(max = 50)
++    @NotNull
++    @Column(name = "nombre_usuario", nullable = false, length = 50)
+     private String nombreUsuario;
+ 
++    @Size(max = 255)
++    @NotNull
++    @Column(name = "contrasena_hash", nullable = false)
++    private String contrasenaHash;
++
++    @NotNull
++    @Lob
++    @Column(name = "rol", nullable = false)
++    private String rol;
++
++    @ManyToOne(fetch = FetchType.LAZY)
++    @JoinColumn(name = "id_profesor")
++    private Profesor idProfesor;
++
+     public Integer getId() {
+         return id;
+     }
+@@ -33,5 +46,29 @@
+     public void setNombreUsuario(String nombreUsuario) {
+         this.nombreUsuario = nombreUsuario;
+     }
+-}
++
++    public String getContrasenaHash() {
++        return contrasenaHash;
++    }
++
++    public void setContrasenaHash(String contrasenaHash) {
++        this.contrasenaHash = contrasenaHash;
++    }
++
++    public String getRol() {
++        return rol;
++    }
++
++    public void setRol(String rol) {
++        this.rol = rol;
++    }
++
++    public Profesor getIdProfesor() {
++        return idProfesor;
++    }
++
++    public void setIdProfesor(Profesor idProfesor) {
++        this.idProfesor = idProfesor;
++    }
+ 
++}
+\ No newline at end of file
+Index: persistencia/src/main/java/mx/DC/DAO/UsuarioDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mx.DC.DAO;\r\n\r\nimport jakarta.persistence.EntityManager;\r\nimport mx.DC.persistence.AbstractDAO;\r\nimport mx.DC.entity.Usuario;\r\n\r\nimport java.util.List;\r\n\r\npublic class UsuarioDAO extends AbstractDAO<Usuario> {\r\n    private final EntityManager entityManager;\r\n\r\n    public UsuarioDAO(EntityManager em) {\r\n        super(Usuario.class);\r\n        this.entityManager = em;\r\n    }\r\n\r\n    public List<Usuario> obtenerTodos(){\r\n        return entityManager\r\n                .createQuery(\"SELECT u FROM Usuario u\", Usuario.class)\r\n                .getResultList();\r\n    }\r\n\r\n    @Override\r\n    public EntityManager getEntityManager() {\r\n        return entityManager;\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/persistencia/src/main/java/mx/DC/DAO/UsuarioDAO.java b/persistencia/src/main/java/mx/DC/DAO/UsuarioDAO.java
+--- a/persistencia/src/main/java/mx/DC/DAO/UsuarioDAO.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/persistencia/src/main/java/mx/DC/DAO/UsuarioDAO.java	(date 1773009396573)
+@@ -1,6 +1,7 @@
+ package mx.DC.DAO;
+ 
+ import jakarta.persistence.EntityManager;
++import jakarta.persistence.NoResultException;
+ import mx.DC.persistence.AbstractDAO;
+ import mx.DC.entity.Usuario;
+ 
+@@ -14,10 +15,15 @@
+         this.entityManager = em;
+     }
+ 
+-    public List<Usuario> obtenerTodos(){
+-        return entityManager
+-                .createQuery("SELECT u FROM Usuario u", Usuario.class)
+-                .getResultList();
++    public Usuario findByNombreUsuario(String nombreUsuario) {
++        EntityManager em = getEntityManager();
++        try {
++            return em.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombre", Usuario.class)
++                    .setParameter("nombre", nombreUsuario)
++                    .getSingleResult();
++        } catch (NoResultException e) {
++            return null;
++        }
+     }
+ 
+     @Override
+Index: entidad/src/main/java/mx/DC/entity/AsignacionDocente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mx.DC.entity;\r\n\r\nimport jakarta.persistence.*;\r\nimport jakarta.validation.constraints.NotNull;\r\nimport jakarta.validation.constraints.Size;\r\n\r\nimport java.time.LocalDate;\r\n\r\n@Entity\r\n@Table(name = \"asignacion_docente\")\r\npublic class AsignacionDocente {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    @Column(name = \"id_asignacion_docente\", nullable = false)\r\n    private Integer id;\r\n\r\n    @NotNull\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"id_profesor\", nullable = false)\r\n    private Profesor idProfesor;\r\n\r\n    @NotNull\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"id_asignatura\", nullable = false)\r\n    private Asignatura idAsignatura;\r\n\r\n    @NotNull\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"id_grupo\", nullable = false)\r\n    private Grupo idGrupo;\r\n\r\n    @NotNull\r\n    @Column(name = \"fecha_asignacion\", nullable = false)\r\n    private LocalDate fechaAsignacion;\r\n\r\n    @Size(max = 20)\r\n    @NotNull\r\n    @Column(name = \"estado_asignacion\", nullable = false, length = 20)\r\n    private String estadoAsignacion;\r\n\r\n    @Size(max = 20)\r\n    @NotNull\r\n    @Column(name = \"tipo_contrato\", nullable = false, length = 20)\r\n    private String tipoContrato;\r\n\r\n    public Integer getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Integer id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public Profesor getIdProfesor() {\r\n        return idProfesor;\r\n    }\r\n\r\n    public void setIdProfesor(Profesor idProfesor) {\r\n        this.idProfesor = idProfesor;\r\n    }\r\n\r\n    public Asignatura getIdAsignatura() {\r\n        return idAsignatura;\r\n    }\r\n\r\n    public void setIdAsignatura(Asignatura idAsignatura) {\r\n        this.idAsignatura = idAsignatura;\r\n    }\r\n\r\n    public Grupo getIdGrupo() {\r\n        return idGrupo;\r\n    }\r\n\r\n    public void setIdGrupo(Grupo idGrupo) {\r\n        this.idGrupo = idGrupo;\r\n    }\r\n\r\n    public LocalDate getFechaAsignacion() {\r\n        return fechaAsignacion;\r\n    }\r\n\r\n    public void setFechaAsignacion(LocalDate fechaAsignacion) {\r\n        this.fechaAsignacion = fechaAsignacion;\r\n    }\r\n\r\n    public String getEstadoAsignacion() {\r\n        return estadoAsignacion;\r\n    }\r\n\r\n    public void setEstadoAsignacion(String estadoAsignacion) {\r\n        this.estadoAsignacion = estadoAsignacion;\r\n    }\r\n\r\n    public String getTipoContrato() {\r\n        return tipoContrato;\r\n    }\r\n\r\n    public void setTipoContrato(String tipoContrato) {\r\n        this.tipoContrato = tipoContrato;\r\n    }\r\n\r\n}
+===================================================================
+diff --git a/entidad/src/main/java/mx/DC/entity/AsignacionDocente.java b/entidad/src/main/java/mx/DC/entity/AsignacionDocente.java
+--- a/entidad/src/main/java/mx/DC/entity/AsignacionDocente.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/entidad/src/main/java/mx/DC/entity/AsignacionDocente.java	(date 1773009365499)
+@@ -5,6 +5,8 @@
+ import jakarta.validation.constraints.Size;
+ 
+ import java.time.LocalDate;
++import java.util.ArrayList;
++import java.util.List;
+ 
+ @Entity
+ @Table(name = "asignacion_docente")
+@@ -99,4 +101,9 @@
+         this.tipoContrato = tipoContrato;
+     }
+ 
++    @OneToMany(mappedBy = "idAsignacionDocente", cascade = CascadeType.ALL, orphanRemoval = true)
++    private List<Horario> horarios = new ArrayList<>();
++
++    public List<Horario> getHorarios() { return horarios; }
++    public void setHorarios(List<Horario> horarios) { this.horarios = horarios; }
+ }
+\ No newline at end of file
+Index: persistencia/src/main/resources/META-INF/persistence.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<persistence xmlns=\"https://jakarta.ee/xml/ns/persistence\"\r\n             xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n             xsi:schemaLocation=\"https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd\"\r\n             version=\"3.1\">\r\n  <persistence-unit name=\"persistencePU\">\r\n    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>\r\n\r\n\r\n    <!-- Declaración manual de entidades -->\r\n    <class>mx.DC.entity.AsignacionDocente</class>\r\n    <class>mx.DC.entity.Asignatura</class>\r\n    <class>mx.DC.entity.Grupo</class>\r\n    <class>mx.DC.entity.Persona</class>\r\n    <class>mx.DC.entity.Profesor</class>\r\n\r\n\r\n    <properties>\r\n      <property name=\"jakarta.persistence.jdbc.driver\" value=\"com.mysql.cj.jdbc.Driver\"/>\r\n      <property name=\"jakarta.persistence.jdbc.url\" value=\"jdbc:mysql://localhost:3306/desarrollo?useSSL=false&amp;serverTimezone=UTC\"/>\r\n      <property name=\"jakarta.persistence.jdbc.user\" value=\"root\"/>\r\n      <property name=\"jakarta.persistence.jdbc.password\" value=\"root\"/>\r\n\r\n\r\n      <property name=\"hibernate.show_sql\" value=\"true\"/>\r\n      <property name=\"hibernate.format_sql\" value=\"true\"/>\r\n      <property name=\"hibernate.hbm2ddl.auto\" value=\"validate\"/>\r\n\r\n\r\n      <property name=\"hibernate.hikari.minimumIdle\" value=\"5\"/>\r\n      <property name=\"hibernate.hikari.maximumPoolSize\" value=\"10\"/>\r\n      <property name=\"hibernate.hikari.idleTimeout\" value=\"30000\"/>\r\n    </properties>\r\n  </persistence-unit>\r\n</persistence>\r\n
+===================================================================
+diff --git a/persistencia/src/main/resources/META-INF/persistence.xml b/persistencia/src/main/resources/META-INF/persistence.xml
+--- a/persistencia/src/main/resources/META-INF/persistence.xml	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/persistencia/src/main/resources/META-INF/persistence.xml	(date 1773009365527)
+@@ -13,6 +13,8 @@
+     <class>mx.DC.entity.Grupo</class>
+     <class>mx.DC.entity.Persona</class>
+     <class>mx.DC.entity.Profesor</class>
++    <class>mx.DC.entity.Horario</class>
++    <class>mx.DC.entity.Usuario</class>
+ 
+ 
+     <properties>
+Index: persistencia/src/main/java/mx/DC/DAO/AlumnoDAO.java
+===================================================================
+diff --git a/persistencia/src/main/java/mx/DC/DAO/AlumnoDAO.java b/persistencia/src/main/java/mx/DC/DAO/AsignaturaDAO.java
+rename from persistencia/src/main/java/mx/DC/DAO/AlumnoDAO.java
+rename to persistencia/src/main/java/mx/DC/DAO/AsignaturaDAO.java
+--- a/persistencia/src/main/java/mx/DC/DAO/AlumnoDAO.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/persistencia/src/main/java/mx/DC/DAO/AsignaturaDAO.java	(date 1773009393453)
+@@ -2,22 +2,22 @@
+ 
+ import jakarta.persistence.EntityManager;
+ import mx.DC.persistence.AbstractDAO;
+-import mx.DC.entity.Alumno;
++import mx.DC.entity.Asignatura;
+ 
+ import java.util.List;
+ 
+ 
+-public class AlumnoDAO extends AbstractDAO<Alumno> {
++public class AsignaturaDAO extends AbstractDAO<Asignatura> {
+     private final EntityManager entityManager;
+ 
+-    public AlumnoDAO(EntityManager em) {
+-        super(Alumno.class);
++    public AsignaturaDAO(EntityManager em) {
++        super(Asignatura.class);
+         this.entityManager = em;
+     }
+ 
+-    public List<Alumno> obtenerTodos(){
++    public List<Asignatura> obtenerTodos(){
+         return entityManager
+-                .createQuery("SELECT a FROM Alumno a", Alumno.class)
++                .createQuery("SELECT a FROM Profesor a", Asignatura.class)
+                 .getResultList();
+     }
+ 
+@@ -25,4 +25,4 @@
+     public EntityManager getEntityManager() {
+         return entityManager;
+     }
+-}
++}
+\ No newline at end of file
+Index: entidad/src/main/java/mx/DC/entity/Profesor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mx.DC.entity;\r\n\r\nimport jakarta.persistence.*;\r\nimport jakarta.validation.constraints.NotNull;\r\nimport jakarta.validation.constraints.Size;\r\n\r\n@Entity\r\n@Table(name = \"profesor\")\r\npublic class Profesor {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    @Column(name = \"id_profesor\", nullable = false)\r\n    private Integer id;\r\n\r\n    @NotNull\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"id_persona\", nullable = false)\r\n    private Persona idPersona;\r\n\r\n    @Size(max = 13)\r\n    @NotNull\r\n    @Column(name = \"RFC\", nullable = false, length = 13)\r\n    private String rfc;\r\n\r\n    public Integer getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Integer id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public Persona getIdPersona() {\r\n        return idPersona;\r\n    }\r\n\r\n    public void setIdPersona(Persona idPersona) {\r\n        this.idPersona = idPersona;\r\n    }\r\n\r\n    public String getRfc() {\r\n        return rfc;\r\n    }\r\n\r\n    public void setRfc(String rfc) {\r\n        this.rfc = rfc;\r\n    }\r\n\r\n}
+===================================================================
+diff --git a/entidad/src/main/java/mx/DC/entity/Profesor.java b/entidad/src/main/java/mx/DC/entity/Profesor.java
+--- a/entidad/src/main/java/mx/DC/entity/Profesor.java	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/entidad/src/main/java/mx/DC/entity/Profesor.java	(date 1773009365502)
+@@ -4,6 +4,9 @@
+ import jakarta.validation.constraints.NotNull;
+ import jakarta.validation.constraints.Size;
+ 
++import java.util.ArrayList;
++import java.util.List;
++
+ @Entity
+ @Table(name = "profesor")
+ public class Profesor {
+@@ -46,4 +49,9 @@
+         this.rfc = rfc;
+     }
+ 
++    @OneToMany(mappedBy = "idProfesor")
++    private List<AsignacionDocente> asignaciones = new ArrayList<>();
++
++    public List<AsignacionDocente> getAsignaciones() { return asignaciones; }
++    public void setAsignaciones(List<AsignacionDocente> asignaciones) { this.asignaciones = asignaciones; }
+ }
+\ No newline at end of file
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Encoding\">\r\n    <file url=\"file://$PROJECT_DIR$/entidad/src/main/java\" charset=\"UTF-8\" />\r\n    <file url=\"file://$PROJECT_DIR$/entidad/src/main/resources\" charset=\"UTF-8\" />\r\n    <file url=\"file://$PROJECT_DIR$/persistencia/src/main/java\" charset=\"UTF-8\" />\r\n    <file url=\"file://$PROJECT_DIR$/persistencia/src/main/resources\" charset=\"UTF-8\" />\r\n    <file url=\"file://$PROJECT_DIR$/src/main/java\" charset=\"UTF-8\" />\r\n    <file url=\"file://$PROJECT_DIR$/src/main/resources\" charset=\"UTF-8\" />\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+--- a/.idea/encodings.xml	(revision 7b17ed6780cb85023f6cfc9df93a6b24a1f32da0)
++++ b/.idea/encodings.xml	(date 1773009365495)
+@@ -3,6 +3,8 @@
+   <component name="Encoding">
+     <file url="file://$PROJECT_DIR$/entidad/src/main/java" charset="UTF-8" />
+     <file url="file://$PROJECT_DIR$/entidad/src/main/resources" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/negocio/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/negocio/src/main/resources" charset="UTF-8" />
+     <file url="file://$PROJECT_DIR$/persistencia/src/main/java" charset="UTF-8" />
+     <file url="file://$PROJECT_DIR$/persistencia/src/main/resources" charset="UTF-8" />
+     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

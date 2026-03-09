@@ -16,6 +16,12 @@ public class AsignacionDocenteDAO extends AbstractDAO<AsignacionDocente> {
         this.entityManager = em;
     }
 
+    public List<AsignacionDocente> obtenerTodos(){
+        return entityManager
+                .createQuery("SELECT a FROM AsignacionDocente a", AsignacionDocente.class)
+                .getResultList();
+    }
+
     public List<AsignacionDocente> findByProfesor(Profesor profesor) {
         EntityManager em = getEntityManager();
         return em.createQuery("SELECT a FROM AsignacionDocente a WHERE a.idProfesor = :profesor", AsignacionDocente.class)

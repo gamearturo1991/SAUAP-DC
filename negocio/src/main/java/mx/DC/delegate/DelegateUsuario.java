@@ -1,22 +1,34 @@
 package mx.DC.delegate;
-import mx.DC.entity.Usuario;
-import mx.DC.integration.ServiceLocator;
+
+import jakarta.persistence.EntityManager;
 import mx.DC.DAO.UsuarioDAO;
+import mx.DC.entity.Usuario;
+import mx.DC.negocio.UsuarioService;
+import mx.DC.persistence.HibernateUtil;
 
 public class DelegateUsuario {
 
     public Usuario login(String nombreUsuario, String password) {
-        UsuarioDAO usuarioDAO = ServiceLocator.getInstanceUsuarioDAO();
-        Usuario usuario = usuarioDAO.findByNombreUsuario(nombreUsuario);
-
-        if (usuario != null && password.equals(usuario.getContrasena())) {
-            return usuario;
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            UsuarioService usuarioService = new UsuarioService(em);
+            return usuarioService.login(nombreUsuario, password);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
-        return null;
     }
 
     public void saveUsuario(Usuario usuario) {
-        UsuarioDAO usuarioDAO = ServiceLocator.getInstanceUsuarioDAO();
-        usuarioDAO.save(usuario);
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO(em);
+            usuarioDAO.save(usuario);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
     }
 }

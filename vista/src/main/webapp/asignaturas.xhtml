@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SAUAP - Registro de Asignaturas</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #ececec; }
+        .top { background: #067a38; color: #fff; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 42px; font-weight: 800; letter-spacing: 1px; }
+        .logo { height: 68px; }
+        .page { padding: 18px 20px 24px; }
+        .title { text-align: center; font-size: 52px; font-weight: 700; margin: 18px 0 16px; }
+        .line { border-bottom: 2px solid #5ba556; margin-bottom: 18px; }
+        .nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 18px; }
+        .nav a, .nav .ui-button { background: #1f7f3a !important; color: #fff !important; border: 0 !important; border-radius: 20px !important; padding: 8px 18px !important; text-decoration: none; font-weight: 700; }
+        .nav a.active { background: #0d5e29 !important; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+        .section-title { font-size: 44px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+        .field { margin-bottom: 14px; }
+        .field label { display: inline-block; width: 260px; font-size: 42px; font-weight: 700; vertical-align: middle; }
+        .field .em { color: #c62d2d; }
+        .input, .ui-inputfield {
+            width: calc(100% - 280px) !important;
+            border-radius: 28px !important;
+            border: 2px solid #d8d8d8 !important;
+            background: #dcdcdc !important;
+            font-size: 34px !important;
+            padding: 10px 18px !important;
+            box-sizing: border-box;
+        }
+        .actions { margin-top: 20px; display: flex; gap: 10px; }
+        .btn { border-radius: 22px !important; padding: 10px 22px !important; border: 0 !important; font-weight: 700 !important; }
+        .btn-main { background: #f0b500 !important; color: #111 !important; }
+        .btn-cancel { background: #7f7f7f !important; color: #fff !important; }
+        .table-wrap { margin-top: 24px; }
+        .ui-datatable-tablewrapper table { font-size: 20px; }
+        .btn-row { background: #2f6dd8 !important; border: 0 !important; color: #fff !important; border-radius: 16px !important; padding: 6px 12px !important; margin-right: 6px; }
+        .btn-row-del { background: #cf2f2f !important; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="top">
+        <div class="brand">SAUAP</div>
+        <h:graphicImage value="resources/uabcl.png" styleClass="logo" />
+    </div>
+
+    <div class="page">
+        <div class="title">Registro de Asignaturas</div>
+        <div class="line"></div>
+
+        <div class="nav">
+            <a class="active" href="asignaturas.xhtml">Asignaturas</a>
+            <a href="profesores.xhtml">Profesores</a>
+            <a href="asignaciones.xhtml">Asignacion materias</a>
+            <a href="crearUsuarioProfesores.xhtml">Crear Usuario</a>
+            <h:form>
+                <p:commandButton value="Cerrar sesion" styleClass="btn" style="background:#9a1f1f;color:#fff" action="#{loginUI.logout()}" ajax="false" />
+            </h:form>
+        </div>
+
+        <h:form id="formAsignatura">
+            <p:messages id="msg" closable="true" />
+
+            <div class="grid">
+                <div>
+                    <div class="section-title">i Informacion General</div>
+                    <div class="field">
+                        <label>Clave</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.id}" styleClass="input" disabled="true" />
+                    </div>
+                    <div class="field">
+                        <label>Nombre</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.nombre}" styleClass="input" />
+                    </div>
+                    <div class="field">
+                        <label class="em">Carrera</label>
+                        <p:inputText value="Licenciatura" styleClass="input" disabled="true" />
+                    </div>
+                    <div class="field">
+                        <label class="em">Creditos</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.numHorasClase + asignaturasUI.asignaturaNueva.numHorasTaller + asignaturasUI.asignaturaNueva.numHorasLaboratorio}" styleClass="input" disabled="true" />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">hourglass Distribucion de Horas a la Semana</div>
+                    <div class="field">
+                        <label>Horas Clase</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.numHorasClase}" styleClass="input">
+                            <f:convertNumber integerOnly="true" />
+                        </p:inputText>
+                    </div>
+                    <div class="field">
+                        <label>Horas Taller</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.numHorasTaller}" styleClass="input">
+                            <f:convertNumber integerOnly="true" />
+                        </p:inputText>
+                    </div>
+                    <div class="field">
+                        <label>Horas Laboratorio</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.numHorasLaboratorio}" styleClass="input">
+                            <f:convertNumber integerOnly="true" />
+                        </p:inputText>
+                    </div>
+                    <div class="field">
+                        <label>Total horas</label>
+                        <p:inputText value="#{asignaturasUI.asignaturaNueva.numHorasClase + asignaturasUI.asignaturaNueva.numHorasTaller + asignaturasUI.asignaturaNueva.numHorasLaboratorio}" styleClass="input" disabled="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <p:commandButton value="Guardar" styleClass="btn btn-main" action="#{asignaturasUI.guardarAsignatura()}" update="formAsignatura" />
+                <p:commandButton value="Limpiar" styleClass="btn btn-cancel" action="#{asignaturasUI.abrirDialogoNueva()}" update="formAsignatura" />
+            </div>
+
+            <div class="table-wrap">
+                <p:dataTable value="#{asignaturasUI.asignaturas}" var="a" rows="8" paginator="true">
+                    <p:column headerText="ID"><h:outputText value="#{a.id}"/></p:column>
+                    <p:column headerText="Nombre"><h:outputText value="#{a.nombre}"/></p:column>
+                    <p:column headerText="Clase"><h:outputText value="#{a.numHorasClase}"/></p:column>
+                    <p:column headerText="Taller"><h:outputText value="#{a.numHorasTaller}"/></p:column>
+                    <p:column headerText="Laboratorio"><h:outputText value="#{a.numHorasLaboratorio}"/></p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Editar" styleClass="btn-row" actionListener="#{asignaturasUI.abrirDialogoEditar(a)}" oncomplete="PF('editDlg').show();" update=":editDialog"/>
+                        <p:commandButton value="Eliminar" styleClass="btn-row btn-row-del" actionListener="#{asignaturasUI.eliminarAsignatura(a)}" update="formAsignatura"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+
+        <p:dialog header="Editar Asignatura" widgetVar="editDlg" id="editDialog" modal="true" width="640">
+            <h:form id="editForm">
+                <p:messages id="editMsg" closable="true" />
+                <div class="field"><label>Nombre</label><p:inputText value="#{asignaturasUI.asignaturaSelecionada.nombre}" styleClass="input"/></div>
+                <div class="field"><label>Horas Clase</label><p:inputText value="#{asignaturasUI.asignaturaSelecionada.numHorasClase}" styleClass="input"><f:convertNumber integerOnly="true"/></p:inputText></div>
+                <div class="field"><label>Horas Taller</label><p:inputText value="#{asignaturasUI.asignaturaSelecionada.numHorasTaller}" styleClass="input"><f:convertNumber integerOnly="true"/></p:inputText></div>
+                <div class="field"><label>Horas Laboratorio</label><p:inputText value="#{asignaturasUI.asignaturaSelecionada.numHorasLaboratorio}" styleClass="input"><f:convertNumber integerOnly="true"/></p:inputText></div>
+                <div class="actions">
+                    <p:commandButton value="Actualizar" styleClass="btn btn-main" action="#{asignaturasUI.actualizarAsignatura()}" update=":formAsignatura :editForm" oncomplete="PF('editDlg').hide();" />
+                    <p:commandButton value="Cancelar" type="button" styleClass="btn btn-cancel" onclick="PF('editDlg').hide();" />
+                </div>
+            </h:form>
+        </p:dialog>
+    </div>
+</h:body>
+</html>

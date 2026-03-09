@@ -17,6 +17,12 @@ public class HorarioDAO extends AbstractDAO<Horario> {
         this.entityManager = em;
     }
 
+    public List<Horario> obtenerTodos(){
+        return entityManager
+                .createQuery("SELECT h FROM Horario h", Horario.class)
+                .getResultList();
+    }
+
     public List<Horario> findByAsignacion(AsignacionDocente asignacion) {
         return entityManager.createQuery(
                 "SELECT h FROM Horario h WHERE h.idAsignacionDocente = :asignacion", Horario.class)

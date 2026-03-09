@@ -7,7 +7,12 @@ package mx.DC.integration;
 
 import jakarta.persistence.EntityManager;
 import mx.DC.DAO.AlumnoDAO;
+import mx.DC.DAO.AsignacionDocenteDAO;
+import mx.DC.DAO.AsignaturaDAO;
+import mx.DC.DAO.HorarioDAO;
+import mx.DC.DAO.ProfesorDAO;
 import mx.DC.DAO.UsuarioDAO;
+import mx.DC.DAO.GrupoDAO;
 import mx.DC.persistence.HibernateUtil;
 
 
@@ -19,6 +24,11 @@ public class ServiceLocator {
 
     private static AlumnoDAO alumnoDAO;
     private static UsuarioDAO usuarioDAO;
+    private static ProfesorDAO profesorDAO;
+    private static AsignaturaDAO asignaturaDAO;
+    private static AsignacionDocenteDAO asignacionDocenteDAO;
+    private static HorarioDAO horarioDAO;
+    private static GrupoDAO grupoDAO;
 
     private static EntityManager getEntityManager(){
         return HibernateUtil.getEntityManager();
@@ -46,5 +56,65 @@ public class ServiceLocator {
             return usuarioDAO;
         }
     }
-    
+
+    /**
+     * se crea la instancia para ProfesorDAO si esta no existe
+     */
+    public static ProfesorDAO getInstanceProfesorDAO(){
+        if(profesorDAO == null){
+            profesorDAO = new ProfesorDAO(getEntityManager());
+            return profesorDAO;
+        } else{
+            return profesorDAO;
+        }
+    }
+
+    /**
+     * se crea la instancia para AsignaturaDAO si esta no existe
+     */
+    public static AsignaturaDAO getInstanceAsignaturaDAO(){
+        if(asignaturaDAO == null){
+            asignaturaDAO = new AsignaturaDAO(getEntityManager());
+            return asignaturaDAO;
+        } else{
+            return asignaturaDAO;
+        }
+    }
+
+    /**
+     * se crea la instancia para AsignacionDocenteDAO si esta no existe
+     */
+    public static AsignacionDocenteDAO getInstanceAsignacionDocenteDAO(){
+        if(asignacionDocenteDAO == null){
+            asignacionDocenteDAO = new AsignacionDocenteDAO(getEntityManager());
+            return asignacionDocenteDAO;
+        } else{
+            return asignacionDocenteDAO;
+        }
+    }
+
+    /**
+     * se crea la instancia para HorarioDAO si esta no existe
+     */
+    public static HorarioDAO getInstanceHorarioDAO(){
+        if(horarioDAO == null){
+            horarioDAO = new HorarioDAO(getEntityManager());
+            return horarioDAO;
+        } else{
+            return horarioDAO;
+        }
+    }
+
+    /**
+     * se crea la instancia para GrupoDAO si esta no existe
+     */
+    public static GrupoDAO getInstanceGrupoDAO(){
+        if(grupoDAO == null){
+            grupoDAO = new GrupoDAO(getEntityManager());
+            return grupoDAO;
+        } else{
+            return grupoDAO;
+        }
+    }
+
 }

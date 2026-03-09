@@ -15,9 +15,9 @@
         <class>mx.DC.entity.Usuario</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver"   value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url"      value="jdbc:mysql://localhost:3310/sauap?serverTimezone=UTC&amp;zeroDateTimeBehavior=convertToNull"/>
+            <property name="jakarta.persistence.jdbc.url"      value="jdbc:mysql://localhost:3306/sauap?serverTimezone=UTC&amp;zeroDateTimeBehavior=convertToNull"/>
             <property name="jakarta.persistence.jdbc.user"     value="root"/>
-            <property name="jakarta.persistence.jdbc.password" value="root"/>
+            <property name="jakarta.persistence.jdbc.password" value="shadic123"/>
             <property name="hibernate.dialect"                 value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql"                value="true"/>
             <property name="hibernate.format_sql"              value="true"/>

@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- @formatter:off -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>SAUAP - Asignacion Materias a Docentes</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #ececec; }
+        .top { background: #067a38; color: #fff; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 42px; font-weight: 800; }
+        .logo { height: 68px; }
+        .page { padding: 18px 20px 24px; }
+        .title { text-align: center; font-size: 50px; font-weight: 700; margin: 18px 0 16px; }
+        .line { border-bottom: 2px solid #5ba556; margin-bottom: 18px; }
+        .nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap; }
+        .nav a { background: #1f7f3a; color: #fff; border-radius: 20px; padding: 8px 18px; text-decoration: none; font-weight: 700; }
+        .nav a.active { background: #0d5e29; }
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .head-band { background: #49b84a; color: #fff; font-size: 26px; padding: 6px 12px; font-weight: 700; border: 1px solid #6da86b; }
+        .search { margin: 8px 0 10px; }
+        .search input { width: 100%; border-radius: 18px; background: #d8d8d8; padding: 8px; border: none; }
+        .list-card { border: 1px solid #d0d0d0; border-radius: 20px; background: #fff; padding: 12px 16px; margin-bottom: 10px; cursor: pointer; }
+        .list-card.active { background: #294b9e; color: #fff; }
+        .strong { font-size: 28px; font-weight: 700; }
+        .muted { font-size: 21px; color: #5c5c5c; }
+        .active .muted { color: #e7e7e7; }
+        .assign { border-top: 2px solid #9cb69b; margin-top: 16px; padding-top: 12px; }
+        .assign-title { font-size: 44px; font-weight: 700; margin-bottom: 12px; }
+        .row { display: grid; grid-template-columns: 220px 1fr 220px 1fr; gap: 14px; align-items: center; margin-bottom: 12px; }
+        .row select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-form { display: block; margin: 10px auto; border: 0; border-radius: 24px; padding: 12px 32px; background: #f2bd00; color: #111; font-size: 20px; font-weight: 700; }
+    </style>
+</h:head>
+
+<h:body>
+<div class="top">
+    <div class="brand">SAUAP</div>
+    <h:graphicImage value="resources/uabcl.png" styleClass="logo" />
+</div>
+
+<div class="page">
+    <div class="title">Asignacion Materias a Docentes</div>
+    <div class="line"></div>
+
+    <div class="nav">
+        <a href="asignaturas.xhtml">Asignaturas</a>
+        <a href="profesores.xhtml">Profesores</a>
+        <a class="active" href="asignaciones.xhtml">Asignacion materias</a>
+        <a href="crearUsuarioProfesores.xhtml">Crear Usuario</a>
+        <h:form style="margin: 0;">
+            <p:commandButton value="Cerrar Sesion" action="#{loginUI.logout()}" ajax="false" style="background:#9a1f1f;color:#fff;border:0;padding:8px 18px;border-radius:20px;text-decoration:none;font-weight:700" />
+        </h:form>
+    </div>
+
+    <h:form id="asignacionForm">
+        <p:messages id="msg" closable="true" />
+
+        <div class="split">
+            <div>
+                <div class="head-band">Profesores (#{asignacionesUI.profesores.size()})</div>
+                <div class="search"><p:inputText placeholder="Buscar profesor" /></div>
+                <ui:repeat value="#{asignacionesUI.profesores}" var="prof">
+                    <p:commandLink actionListener="#{asignacionesUI.seleccionarProfesor(prof.id)}" update="asignacionForm" style="text-decoration:none">
+                        <div class="list-card #{asignacionesUI.profesorIdSeleccionado eq prof.id ? 'active' : ''}">
+                            <div class="strong">#{asignacionesUI.nombreProfesor(prof)}</div>
+                            <div class="muted">RFC #{prof.rfc}</div>
+                        </div>
+                    </p:commandLink>
+                </ui:repeat>
+            </div>
+
+            <div>
+                <div class="head-band">Asignaturas (#{asignacionesUI.asignaturas.size()})</div>
+                <div class="search"><p:inputText placeholder="Buscar asignatura" /></div>
+                <ui:repeat value="#{asignacionesUI.asignaturas}" var="asig">
+                    <p:commandLink actionListener="#{asignacionesUI.seleccionarAsignatura(asig.id)}" update="asignacionForm" style="text-decoration:none">
+                        <div class="list-card #{asignacionesUI.asignaturaIdSeleccionada eq asig.id ? 'active' : ''}">
+                            <div class="strong">#{asig.nombre}</div>
+                            <div class="muted">Clase #{asig.numHorasClase}, Taller #{asig.numHorasTaller}, Lab #{asig.numHorasLaboratorio}</div>
+                            <div class="muted">Total #{asignacionesUI.horasTotalesAsignatura(asig)} hrs</div>
+                        </div>
+                    </p:commandLink>
+                </ui:repeat>
+            </div>
+        </div>
+
+        <div class="assign">
+            <div class="assign-title">Asignacion</div>
+            <div class="row">
+                <label>Profesor</label>
+                <p:selectOneMenu value="#{asignacionesUI.profesorIdSeleccionado}">
+                    <f:selectItems value="#{asignacionesUI.profesores}" var="p" itemValue="#{p.id}" itemLabel="#{asignacionesUI.nombreProfesor(p)}"/>
+                </p:selectOneMenu>
+                <label>Asignatura</label>
+                <p:selectOneMenu value="#{asignacionesUI.asignaturaIdSeleccionada}">
+                    <f:selectItems value="#{asignacionesUI.asignaturas}" var="a" itemValue="#{a.id}" itemLabel="#{a.nombre}"/>
+                </p:selectOneMenu>
+            </div>
+            <div class="row">
+                <label>Grupo</label>
+                <p:selectOneMenu value="#{asignacionesUI.grupoIdSeleccionado}">
+                    <f:selectItems value="#{asignacionesUI.grupos}" var="g" itemValue="#{g.id}" itemLabel="#{asignacionesUI.etiquetaGrupo(g)}"/>
+                </p:selectOneMenu>
+                <span></span>
+                <span></span>
+            </div>
+            <p:commandButton value="Aceptar" styleClass="btn-form" action="#{asignacionesUI.guardarAsignacion()}" update="asignacionForm" />
+        </div>
+    </h:form>
+</div>
+</h:body>
+</html>
+<!-- @formatter:on -->
+

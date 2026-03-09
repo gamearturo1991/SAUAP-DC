@@ -1,6 +1,11 @@
 package mx.DC.integration;
 
-import mx.DC.facade.*;
+import mx.DC.facade.FacadeAsignacionDocente;
+import mx.DC.facade.FacadeAsignatura;
+import mx.DC.facade.FacadeGrupo;
+import mx.DC.facade.FacadeHorario;
+import mx.DC.facade.FacadeProfesor;
+import mx.DC.facade.FacadeUsuario;
 
 public class ServiceFacadeLocator {
 
@@ -9,6 +14,7 @@ public class ServiceFacadeLocator {
     private static FacadeAsignatura facadeAsignatura;
     private static FacadeAsignacionDocente facadeAsignacionDocente;
     private static FacadeHorario facadeHorario;
+    private static FacadeGrupo facadeGrupo;
 
     public static FacadeUsuario getInstanceFacadeUsuario() {
         if (facadeUsuario == null) {
@@ -43,5 +49,12 @@ public class ServiceFacadeLocator {
             facadeHorario = new FacadeHorario();
         }
         return facadeHorario;
+    }
+
+    public static FacadeGrupo getInstanceFacadeGrupo() {
+        if (facadeGrupo == null) {
+            facadeGrupo = new FacadeGrupo();
+        }
+        return facadeGrupo;
     }
 }

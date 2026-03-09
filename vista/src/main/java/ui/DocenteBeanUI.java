@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import mx.DC.entity.Profesor;
 import mx.DC.negocio.ProfesorService;
@@ -23,8 +24,16 @@ public class DocenteBeanUI implements Serializable {
     private String apellidoMaterno;
     private String tipoContrato = "planta";
 
+    private boolean crearUsuario;
+    private String nombreUsuario;
+    private String contrasena;
+    private String confirmacionContrasena;
+
     private List<Profesor> docentes = new ArrayList<>();
     private ProfesorService profesorService;
+
+    @Inject
+    private LoginBeanUI loginUI;
 
     @PostConstruct
     public void init() {
@@ -34,7 +43,20 @@ public class DocenteBeanUI implements Serializable {
 
     public void registrar() {
         try {
-            profesorService.registrarDocente(rfc, nombre, apellidoPaterno, apellidoMaterno, tipoContrato);
+            if (crearUsuario) {
+                profesorService.registrarDocenteConUsuario(
+                        rfc,
+                        nombre,
+                        apellidoPaterno,
+                        apellidoMaterno,
+                        tipoContrato,
+                        nombreUsuario,
+                        contrasena,
+                        confirmacionContrasena
+                );
+            } else {
+                profesorService.registrarDocente(rfc, nombre, apellidoPaterno, apellidoMaterno, tipoContrato);
+            }
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Docente registrado correctamente", null));
             limpiar();
@@ -46,11 +68,25 @@ public class DocenteBeanUI implements Serializable {
     }
 
     public void limpiar() {
-        rfc = null; nombre = null; apellidoPaterno = null; apellidoMaterno = null; tipoContrato = "planta";
+        rfc = null;
+        nombre = null;
+        apellidoPaterno = null;
+        apellidoMaterno = null;
+        tipoContrato = "planta";
+        crearUsuario = false;
+        nombreUsuario = null;
+        contrasena = null;
+        confirmacionContrasena = null;
     }
 
     private void cargarDocentes() {
         docentes = profesorService.obtenerTodos();
+    }
+
+    public boolean isAdministrador() {
+        return loginUI != null
+                && loginUI.getUsuarioActual() != null
+                && loginUI.getUsuarioActual().esAdministrador();
     }
 
     // Getters / Setters
@@ -65,4 +101,13 @@ public class DocenteBeanUI implements Serializable {
     public String getTipoContrato() { return tipoContrato; }
     public void setTipoContrato(String v) { this.tipoContrato = v; }
     public List<Profesor> getDocentes() { return docentes; }
+
+    public boolean isCrearUsuario() { return crearUsuario; }
+    public void setCrearUsuario(boolean crearUsuario) { this.crearUsuario = crearUsuario; }
+    public String getNombreUsuario() { return nombreUsuario; }
+    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    public String getConfirmacionContrasena() { return confirmacionContrasena; }
+    public void setConfirmacionContrasena(String confirmacionContrasena) { this.confirmacionContrasena = confirmacionContrasena; }
 }

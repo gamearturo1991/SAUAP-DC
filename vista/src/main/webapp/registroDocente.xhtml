@@ -104,6 +104,37 @@
                         <f:selectItem itemLabel="Tiempo completo" itemValue="tiempo_completo"/>
                     </p:selectOneMenu>
                 </div>
+
+                <h:panelGroup rendered="#{docenteUI.administrador}">
+                    <div class="section-header" style="margin-top:20px;">Cuenta de acceso</div>
+                    <div class="field-row">
+                        <label>Crear usuario</label>
+                        <p:selectBooleanCheckbox value="#{docenteUI.crearUsuario}">
+                            <p:ajax update="newUsername newPass newPassConfirm" process="@this"/>
+                        </p:selectBooleanCheckbox>
+                    </div>
+                    <div class="field-row">
+                        <label>Usuario</label>
+                        <p:inputText id="newUsername" value="#{docenteUI.nombreUsuario}" maxlength="100"
+                                     required="#{docenteUI.crearUsuario}"
+                                     disabled="#{not docenteUI.crearUsuario}"
+                                     requiredMessage="Nombre de usuario obligatorio"/>
+                    </div>
+                    <div class="field-row">
+                        <label>Contrasena</label>
+                        <p:password id="newPass" value="#{docenteUI.contrasena}" feedback="false"
+                                    required="#{docenteUI.crearUsuario}"
+                                    disabled="#{not docenteUI.crearUsuario}"
+                                    requiredMessage="Contrasena obligatoria"/>
+                    </div>
+                    <div class="field-row">
+                        <label>Confirmar contrasena</label>
+                        <p:password id="newPassConfirm" value="#{docenteUI.confirmacionContrasena}" feedback="false"
+                                    required="#{docenteUI.crearUsuario}"
+                                    disabled="#{not docenteUI.crearUsuario}"
+                                    requiredMessage="Confirmacion de contrasena obligatoria"/>
+                    </div>
+                </h:panelGroup>
             </div>
 
             <!-- Foto placeholder -->

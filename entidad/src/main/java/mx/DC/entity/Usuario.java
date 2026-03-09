@@ -1,44 +1,85 @@
 package mx.DC.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario", nullable = false)
     private Integer id;
 
-    @NotNull @Size(max = 50)
-    @Column(name = "nombre_usuario", nullable = false, length = 50, unique = true)
+    @Column(name = "nombre_usuario", length = 100)
     private String nombreUsuario;
 
-    @NotNull @Size(max = 255)
-    @Column(name = "contrasena_hash", nullable = false)
+    @Column(name = "contrasena_hash", length = 255)
     private String contrasenaHash;
 
-    @NotNull
-    @Column(name = "rol", nullable = false, length = 20)
+    @Column(name = "rol", length = 50)
     private String rol;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_profesor")
     private Profesor idProfesor;
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public String getNombreUsuario() { return nombreUsuario; }
-    public void setNombreUsuario(String v) { this.nombreUsuario = v; }
-    public String getContrasenaHash() { return contrasenaHash; }
-    public void setContrasenaHash(String v) { this.contrasenaHash = v; }
-    public String getRol() { return rol; }
-    public void setRol(String rol) { this.rol = rol; }
-    public Profesor getIdProfesor() { return idProfesor; }
-    public void setIdProfesor(Profesor v) { this.idProfesor = v; }
-    public boolean esAdministrador() { return "administrador".equals(rol); }
-    public boolean esProfesor() { return "profesor".equals(rol); }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getContrasenaHash() {
+        return contrasenaHash;
+    }
+
+    public void setContrasenaHash(String contrasenaHash) {
+        this.contrasenaHash = contrasenaHash;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public Profesor getIdProfesor() {
+        return idProfesor;
+    }
+
+    public void setIdProfesor(Profesor idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
+    public boolean esAdministrador() {
+        return rol != null && "administrador".equalsIgnoreCase(rol.trim());
+    }
+
+    // Compatibilidad con codigo legado que usa getContrasena()
+    public String getContrasena() {
+        return contrasenaHash;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasenaHash = contrasena;
+    }
 }

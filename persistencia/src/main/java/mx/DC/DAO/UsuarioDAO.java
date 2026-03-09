@@ -1,14 +1,39 @@
 package mx.DC.DAO;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import mx.DC.entity.Usuario;
 import mx.DC.persistence.AbstractDAO;
+import mx.DC.entity.Usuario;
+
+import java.util.List;
+
 public class UsuarioDAO extends AbstractDAO<Usuario> {
     private final EntityManager entityManager;
-    public UsuarioDAO(EntityManager em) { super(Usuario.class); this.entityManager = em; }
-    public Usuario findByNombreUsuario(String n) {
-        try { return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :n", Usuario.class).setParameter("n", n).getSingleResult(); }
-        catch (NoResultException e) { return null; }
+
+    public UsuarioDAO(EntityManager em) {
+        super(Usuario.class);
+        this.entityManager = em;
     }
-    @Override public EntityManager getEntityManager() { return entityManager; }
+
+    public List<Usuario> obtenerTodos(){
+        return entityManager
+                .createQuery("SELECT u FROM Usuario u", Usuario.class)
+                .getResultList();
+    }
+
+    public Usuario findByNombreUsuario(String nombreUsuario) {
+        try {
+            return entityManager
+                    .createQuery("SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario", Usuario.class)
+                    .setParameter("nombreUsuario", nombreUsuario)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

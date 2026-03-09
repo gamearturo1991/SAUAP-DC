@@ -1,78 +1,68 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <title>SAUAP - Inicio de Sesión</title>
+        <h:outputStylesheet library="." name="style.css"/>
         <style>
-            
-            *{
-                text-align: center;
-            }
-            .center{
-                float: none;
-                margin: 0 auto;
-                
-            }
-            
-           
-            div.login{
-                position: absolute;
-                top:0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 35%;
-                width: 25%;
-                padding: 25px;
-                margin: auto;
-                background: white;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            }
-            .logo{
-                width: 150px;
-            }
-            .form-control:focus{
-                border-color:#007738;
-            }
-            .btn-success{
-                text-shadow: none;
-            }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Inter', sans-serif; background: #1a5c2a; min-height: 100vh;
+                   display: flex; align-items: center; justify-content: center; }
+            .login-wrap { background: #2d7a3a; border: 3px solid rgba(255,255,255,0.2);
+                border-radius: 12px; padding: 48px 56px; width: 440px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4); position: relative; }
+            .shield-corner { position: absolute; top: 16px; right: 16px; width: 56px; height: 56px;
+                background: white; border-radius: 50%; display: flex; align-items: center;
+                justify-content: center; font-size: 26px; }
+            .login-wrap h2 { color: white; font-size: 22px; font-weight: 500;
+                text-align: center; margin-bottom: 36px; }
+            .logo-img { display: block; margin: 0 auto 20px auto; width: 100px; }
+            .lf { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+            .lf label { color: white; font-size: 15px; width: 110px; text-align: right; }
+            .lf .ui-inputfield { flex: 1; background: #f0f0f0; border: none; border-radius: 4px;
+                padding: 10px 14px; font-size: 15px; width: 100% !important; }
+            .login-actions { display: flex; justify-content: flex-end; margin-top: 28px; }
+            .btn-entrar { background: #f0f0f0; border: none; padding: 10px 28px;
+                font-size: 15px; font-weight: 500; cursor: pointer; border-radius: 4px; }
+            .btn-entrar:hover { background: white; }
+            .login-hint { color: rgba(255,255,255,0.45); font-size: 12px;
+                text-align: center; margin-top: 14px; line-height: 1.8; }
         </style>
     </h:head>
 
     <h:body>
-        <div class = "row">
-           
-            <h:form>
-               
-                <p:messages id="messages" showDetail="true" closable="true">
-                     
-                </p:messages>
-                <div class="login">
-                    <div class="panel-header">
-                        <p:graphicImage url="resources/uabcl.png" class="logo" />
-                    </div>
-                    <div class="panel-body">
-                        <div class=" form-group">
-                            <p:inputText class ="form-control" placeholder ="Correo:" autocomplete="false" value ="#{loginUI.usuario.correo}" />
-                        </div>
-                        <div class="form-group">
-                            <p:password class ="form-control" placeholder="Contraseña: " value="#{loginUI.usuario.contrasena}" />
-                        </div>
-                        <p:commandButton update="messages" class = "btn btn-success" value ="Iniciar sesion" actionListener ="#{loginUI.login()}" />
-
-                    </div>
+        <div class="login-wrap">
+            <div class="shield-corner">🏛️</div>
+            <p:graphicImage url="resources/uabcl.png" styleClass="logo-img" />
+            <h2>Inicio de Sesión</h2>
+            <h:form id="loginForm">
+                <p:messages id="messages" showDetail="true" closable="true" />
+                <div class="lf">
+                    <label>Usuario</label>
+                    <p:inputText id="usuario" placeholder="usuario o RFC"
+                                 value="#{loginUI.usuario.nombreUsuario}" autocomplete="off" />
                 </div>
-                
+                <div class="lf">
+                    <label>Contraseña</label>
+                    <p:password id="password" placeholder="••••••••"
+                                value="#{loginUI.usuario.contrasena}" feedback="false" />
+                </div>
+                <div class="login-actions">
+                    <p:commandButton value="Entrar" styleClass="btn-entrar"
+                                     action="#{loginUI.login()}" update="messages" ajax="false" />
+                </div>
             </h:form>
-            
+            <div class="login-hint">
+                Admin: <strong style="color:rgba(255,255,255,0.75)">admin</strong> /
+                <strong style="color:rgba(255,255,255,0.75)">admin</strong><br/>
+                Docente: usuario y contraseña = <strong style="color:rgba(255,255,255,0.75)">su RFC</strong>
+            </div>
         </div>
-            
     </h:body>
 </html>

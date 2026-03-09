@@ -19,8 +19,8 @@ public class Usuario {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "contrasena_hash", nullable = false)
-    private String contrasenaHash;
+    @Column(name = "contrasena", nullable = false)
+    private String contrasena;
 
     @NotNull
     @Lob
@@ -47,12 +47,12 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public String getContrasenaHash() {
-        return contrasenaHash;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContrasenaHash(String contrasenaHash) {
-        this.contrasenaHash = contrasenaHash;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getRol() {

@@ -9,7 +9,7 @@ public class DelegateUsuario {
         UsuarioDAO usuarioDAO = ServiceLocator.getInstanceUsuarioDAO();
         Usuario usuario = usuarioDAO.findByNombreUsuario(nombreUsuario);
 
-        if (usuario != null && password.equals(usuario.getContrasenaHash())) {
+        if (usuario != null && password.equals(usuario.getContrasena())) {
             return usuario;
         }
         return null;

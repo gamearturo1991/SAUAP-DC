@@ -6,46 +6,61 @@
 package mx.DC.integration;
 
 import jakarta.persistence.EntityManager;
-import mx.DC.DAO.ProfesorDAO;
-import mx.DC.DAO.UsuarioDAO;
-import mx.DC.entity.Profesor;
+import mx.DC.DAO.*;
 import mx.DC.persistence.HibernateUtil;
 
-
-/**
- *
- * @author total
- */
 public class ServiceLocator {
 
     private static ProfesorDAO profesorDAO;
     private static UsuarioDAO usuarioDAO;
+    private static AsignaturaDAO asignaturaDAO;
+    private static AsignacionDocenteDAO asignacionDocenteDAO;
+    private static HorarioDAO horarioDAO;
+    private static GrupoDAO grupoDAO;
 
-    private static EntityManager getEntityManager(){
+    private static EntityManager getEntityManager() {
         return HibernateUtil.getEntityManager();
     }
 
-    /**
-     * se crea la instancia para alumno DAO si esta no existe
-     */
-    public static ProfesorDAO getInstanceAlumnoDAO(){
-        if(profesorDAO == null){
-           profesorDAO = new ProfesorDAO(getEntityManager());
-            return profesorDAO;
-        } else{
-            return profesorDAO;
+    public static ProfesorDAO getInstanceProfesorDAO() {
+        if (profesorDAO == null) {
+            profesorDAO = new ProfesorDAO(getEntityManager());
         }
+        return profesorDAO;
     }
-    /**
-     * se crea la instancia de usuarioDAO si esta no existe
-     */
-    public static UsuarioDAO getInstanceUsuarioDAO(){
-        if(usuarioDAO == null){
+
+    public static UsuarioDAO getInstanceUsuarioDAO() {
+        if (usuarioDAO == null) {
             usuarioDAO = new UsuarioDAO(getEntityManager());
-            return usuarioDAO;
-        } else{
-            return usuarioDAO;
         }
+        return usuarioDAO;
     }
-    
+
+    public static AsignaturaDAO getInstanceAsignaturaDAO() {
+        if (asignaturaDAO == null) {
+            asignaturaDAO = new AsignaturaDAO(getEntityManager());
+        }
+        return asignaturaDAO;
+    }
+
+    public static AsignacionDocenteDAO getInstanceAsignacionDocenteDAO() {
+        if (asignacionDocenteDAO == null) {
+            asignacionDocenteDAO = new AsignacionDocenteDAO(getEntityManager());
+        }
+        return asignacionDocenteDAO;
+    }
+
+    public static HorarioDAO getInstanceHorarioDAO() {
+        if (horarioDAO == null) {
+            horarioDAO = new HorarioDAO(getEntityManager());
+        }
+        return horarioDAO;
+    }
+
+    public static GrupoDAO getInstanceGrupoDAO() {
+        if (grupoDAO == null) {
+            grupoDAO = new GrupoDAO(getEntityManager());
+        }
+        return grupoDAO;
+    }
 }

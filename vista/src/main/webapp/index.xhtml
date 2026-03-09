@@ -1,57 +1,82 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <p:panelGrid class="txt">
-            <f:facet name="header">  
-                <p:row>
-                    <p:column colspan="7"><p:graphicImage url="resources/user.png" class="logo"/></p:column>
-                </p:row>
-            </f:facet>
-            <p:row>
-                <p:column styleClass="celda">Nombre:</p:column>
-                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.nombre}" /></p:column>
-            </p:row>
-            <p:row>
-                <p:column styleClass="celda">Apellido:</p:column>
-                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.apellidos}" /></p:column>
-            </p:row>
-            <p:row>
-                <p:column styleClass="celda">Matricula:</p:column>
-                <p:column><h:outputText value="#{loginUI.usuario.idAlumno.matricula}" /></p:column>
-            </p:row>
-        </p:panelGrid>
-    </h:body>
-    <style>
-        .logo{
-            width: 170px;
-        }
-        .celda{
-            width: 25%;
-            background-color: #089b4d;
-            color:white;
-        }
-        .txt{
-                position: absolute;
-                top:0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 35%;
-                width: 25%;
-                padding: 25px;
-                margin: auto;
-                background: white;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            
-        }
-    </style>
-</html>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
+    <h:head>
+        <title>SAUAP - Mi Panel Docente</title>
+        <h:outputStylesheet library="." name="style.css"/>
+        <ui:include src="/WEB-INF/includes/sauap-style.xhtml" />
+    </h:head>
+
+    <h:body>
+        <!-- Header docente -->
+        <div class="header">
+            <span class="logo">SAUAP</span>
+            <div class="nav-links">
+                <div class="user-badge">
+                    👤 <h:outputText value="#{loginUI.usuario.nombreUsuario}" />
+                    <span class="role-tag">DOCENTE</span>
+                </div>
+                <h:form>
+                    <p:commandButton value="Cerrar sesión" styleClass="nav-btn"
+                                     action="#{loginUI.logout()}" ajax="false"
+                                     style="background:rgba(255,80,80,0.25)"/>
+                </h:form>
+            </div>
+            <div class="shield">🏛️</div>
+        </div>
+
+        <div class="content">
+            <div class="page-title">Mi Panel Docente</div>
+            <div class="title-line"></div>
+
+            <!-- Bienvenida -->
+            <div class="prof-welcome">
+                <div class="prof-avatar">👨‍🏫</div>
+                <div>
+                    <h2>
+                        <h:outputText value="#{loginUI.usuario.idProfesor.idPersona.nombre}"/>
+                        <h:outputText value=" #{loginUI.usuario.idProfesor.idPersona.apellidoPaterno}"/>
+                    </h2>
+                    <p>RFC: <h:outputText value="#{loginUI.usuario.idProfesor.rfc}"/></p>
+                    <p>Rol: <h:outputText value="#{loginUI.usuario.rol}"/></p>
+                </div>
+            </div>
+
+            <!-- Mis asignaciones -->
+            <div class="sec-title" style="margin-top:24px;">
+                <div class="sec-icon">📚</div> Mis Materias Asignadas
+            </div>
+
+            <p:dataTable value="#{loginUI.usuario.idProfesor.asignaciones}" var="a"
+                         emptyMessage="No tienes materias asignadas aún." styleClass="sauap-table">
+                <p:column headerText="Asignatura">
+                    <strong><h:outputText value="#{a.idAsignatura.nombre}"/></strong>
+                </p:column>
+                <p:column headerText="Grupo">
+                    <h:outputText value="#{a.idGrupo.codigoGrupo}-#{a.idGrupo.numeroGrupo}"/>
+                </p:column>
+                <p:column headerText="Contrato">
+                    <h:outputText value="#{a.tipoContrato}"/>
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{a.estadoAsignacion}"/>
+                </p:column>
+                <p:column headerText="Horas Clase">
+                    <h:outputText value="#{a.idAsignatura.numHorasClase}"/>
+                </p:column>
+                <p:column headerText="Horas Taller">
+                    <h:outputText value="#{a.idAsignatura.numHorasTaller}"/>
+                </p:column>
+                <p:column headerText="Horas Lab">
+                    <h:outputText value="#{a.idAsignatura.numHorasLaboratorio}"/>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:body>
+</html>

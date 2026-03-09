@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "profesor")
 public class Profesor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_profesor", nullable = false)
@@ -20,38 +18,21 @@ public class Profesor {
     @JoinColumn(name = "id_persona", nullable = false)
     private Persona idPersona;
 
-    @Size(max = 13)
-    @NotNull
+    @NotNull @Size(max = 13)
     @Column(name = "RFC", nullable = false, length = 13)
     private String rfc;
 
-    public Integer getId() {
-        return id;
-    }
+    @NotNull @Size(max = 20)
+    @Column(name = "tipo_contrato", nullable = false, length = 20)
+    private String tipoContrato = "planta";
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Persona getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Persona idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    @OneToMany(mappedBy = "idProfesor")
-    private List<AsignacionDocente> asignaciones = new ArrayList<>();
-
-    public List<AsignacionDocente> getAsignaciones() { return asignaciones; }
-    public void setAsignaciones(List<AsignacionDocente> asignaciones) { this.asignaciones = asignaciones; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Persona getIdPersona() { return idPersona; }
+    public void setIdPersona(Persona v) { this.idPersona = v; }
+    public String getRfc() { return rfc; }
+    public void setRfc(String rfc) { this.rfc = rfc; }
+    public String getTipoContrato() { return tipoContrato; }
+    public void setTipoContrato(String v) { this.tipoContrato = v; }
+    public String getNombreCompleto() { return idPersona != null ? idPersona.getNombreCompleto() : rfc; }
 }

@@ -4,75 +4,53 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
-    <h:head>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="style.css" rel="stylesheet" type="text/css"/>
-        <style>
-            
-            *{
-                text-align: center;
-            }
-            .center{
-                float: none;
-                margin: 0 auto;
-                
-            }
-            
-           
-            div.login{
-                position: absolute;
-                top:0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 35%;
-                width: 25%;
-                padding: 25px;
-                margin: auto;
-                background: white;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            }
-            .logo{
-                width: 150px;
-            }
-            .form-control:focus{
-                border-color:#007738;
-            }
-            .btn-success{
-                text-shadow: none;
-            }
-        </style>
-    </h:head>
-
-    <h:body>
-        <div class = "row">
-           
-            <h:form>
-               
-                <p:messages id="messages" showDetail="true" closable="true">
-                     
-                </p:messages>
-                <div class="login">
-                    <div class="panel-header">
-                        <p:graphicImage url="resources/uabcl.png" class="logo" />
-                    </div>
-                    <div class="panel-body">
-                        <div class=" form-group">
-                            <p:inputText class ="form-control" placeholder ="Correo:" autocomplete="false" value ="#{loginUI.usuario.correo}" />
-                        </div>
-                        <div class="form-group">
-                            <p:password class ="form-control" placeholder="Contraseña: " value="#{loginUI.usuario.contrasena}" />
-                        </div>
-                        <p:commandButton update="messages" class = "btn btn-success" value ="Iniciar sesion" actionListener ="#{loginUI.login()}" />
-
-                    </div>
+<h:head>
+    <title>SAUAP - Inicio de Sesion</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body { background-color: #1b6b3a; margin: 0; }
+        .login-wrapper {
+            position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .login-card {
+            background: #007738; border-radius: 4px; padding: 30px 40px;
+            width: 420px; box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        .login-card h2 { color: #fff; text-align: center; margin-bottom: 24px; font-size: 22px; }
+        .login-logo { position: absolute; top: 16px; right: 16px; width: 60px; }
+        .field-row { display: flex; align-items: center; margin-bottom: 16px; }
+        .field-row label { color: #fff; width: 110px; flex-shrink: 0; font-size: 15px; }
+        .field-row .ui-inputfield { flex: 1; border-radius: 3px; border: none; padding: 6px 10px; }
+        .btn-entrar {
+            display: block; width: 120px; margin: 20px 0 0 auto;
+            background: #fff; color: #007738; border: none; padding: 8px 20px;
+            border-radius: 3px; font-size: 14px; cursor: pointer; font-weight: bold;
+        }
+        .btn-entrar:hover { background: #e6e6e6; }
+        .ui-messages { margin-bottom: 12px; }
+    </style>
+</h:head>
+<h:body>
+    <div class="login-wrapper">
+        <h:form>
+            <div class="login-card">
+                <p:graphicImage url="resources/uabcl.png" styleClass="login-logo"/>
+                <h2>Inicio de sesion</h2>
+                <p:messages id="messages" showDetail="true" closable="true"/>
+                <div class="field-row">
+                    <label>Usuario</label>
+                    <p:inputText value="#{loginUI.nombreUsuario}" autocomplete="off"/>
                 </div>
-                
-            </h:form>
-            
-        </div>
-            
-    </h:body>
+                <div class="field-row">
+                    <label>Contrasena</label>
+                    <p:password value="#{loginUI.contrasena}" feedback="false"/>
+                </div>
+                <p:commandButton value="Entrar" styleClass="btn-entrar"
+                                 action="#{loginUI.login()}" ajax="false"/>
+            </div>
+        </h:form>
+    </div>
+</h:body>
 </html>

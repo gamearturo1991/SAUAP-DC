@@ -104,23 +104,21 @@
             <artifactId>weld-servlet-shaded</artifactId>
             <version>5.1.1.Final</version>
         </dependency>
+        <!-- Modulos internos -->
         <dependency>
             <groupId>mx.SAUAP-DC.desarrollo</groupId>
-            <artifactId>SAUAP-DC</artifactId>
+            <artifactId>entidad</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>mx.SAUAP-DC.desarrollo</groupId>
-            <artifactId>SAUAP-DC</artifactId>
+            <artifactId>persistencia</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>mx.SAUAP-DC.desarrollo</groupId>
-            <artifactId>SAUAP-DC</artifactId>
+            <artifactId>negocio</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
 

@@ -1,29 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package helper;
 
-
-import integration.ServiceFacadeLocator;
-import mx.avanti.entidad.Usuario;
+import mx.DC.entity.Usuario;
+import mx.DC.negocio.UsuarioService;
+import mx.DC.persistence.JPAUtil;
 
 import java.io.Serializable;
 
 public class LoginHelper implements Serializable {
-    
 
-    /**
-     * Metodo para hacer login llamara a la instancia de usuarioFacade
-     * @param correo
-     * @param password
-     * @return 
-     */
-    public Usuario Login(String correo, String password){
-        return ServiceFacadeLocator.getInstanceFacadeUsuario().login(password, correo);
+    public Usuario Login(String nombreUsuario, String password) {
+        UsuarioService service = new UsuarioService(JPAUtil.getEntityManager());
+        return service.login(nombreUsuario, password);
     }
-    
-    
-    
 }

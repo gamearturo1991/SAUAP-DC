@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
     <title>SAUAP - Perfil Docente</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
@@ -37,22 +38,18 @@
         .stat-box .num { font-size: 26px; font-weight: bold; }
         .stat-box .lbl { font-size: 11px; }
         .content { margin: 0 20px 20px 20px; background: #fff; border-radius: 6px; padding: 0; }
-        .tabs { display: flex; border-bottom: 2px solid #28a745; padding: 0 16px; }
-        .tab-btn {
-            padding: 10px 20px; background: none; border: none; cursor: pointer;
-            font-size: 14px; color: #555;
-        }
-        .tab-btn.active { color: #1b6b3a; font-weight: bold; border-bottom: 3px solid #1b6b3a; }
         .schedule-grid { overflow-x: auto; padding: 16px; }
         table.horario { width: 100%; border-collapse: collapse; font-size: 13px; }
         table.horario th {
             background: #f0f0f0; padding: 8px; text-align: center;
             border: 1px solid #ddd; font-weight: bold;
         }
-        table.horario td { padding: 8px; border: 1px solid #ddd; text-align: center; height: 36px; }
-        .bloque-verde { background: #d4edda; border-radius: 3px; }
-        .bloque-azul { background: #cce5ff; border-radius: 3px; }
+        table.horario td { padding: 4px 6px; border: 1px solid #ddd; text-align: center; height: 36px; vertical-align: middle; }
+        table.horario td.hora-col { background: #f8f8f8; font-weight: bold; width: 60px; font-size: 12px; }
         .materias-panel { padding: 16px; }
+        .leyenda { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
+        .leyenda-item { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+        .leyenda-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid #ccc; }
     </style>
 </h:head>
 <h:body>
@@ -100,26 +97,55 @@
         </div>
     </div>
 
-    <!-- Tabs + contenido -->
+    <!-- Tabs -->
     <div class="content">
         <p:tabView style="border:none;">
+
+            <!-- Tab: Horario Semanal -->
             <p:tab title="Mi Horario Semanal">
                 <div class="schedule-grid">
                     <table class="horario">
-                        <tr>
-                            <th>Hora</th><th>Lunes</th><th>Martes</th>
-                            <th>Miercoles</th><th>Jueves</th><th>Viernes</th><th>Sabado</th>
-                        </tr>
-                        <tr><td>07:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>08:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>09:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>10:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>11:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>12:00</td><td/><td/><td/><td/><td/><td/></tr>
-                        <tr><td>13:00</td><td/><td/><td/><td/><td/><td/></tr>
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">Hora</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miercoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sabado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{perfilUI.horasDisplay}" var="hora">
+                                <tr>
+                                    <td class="hora-col">#{hora}</td>
+                                    <td style="#{perfilUI.getEstiloCelda('Lunes', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Lunes', hora)}" escape="false"/>
+                                    </td>
+                                    <td style="#{perfilUI.getEstiloCelda('Martes', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Martes', hora)}" escape="false"/>
+                                    </td>
+                                    <td style="#{perfilUI.getEstiloCelda('Miercoles', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Miercoles', hora)}" escape="false"/>
+                                    </td>
+                                    <td style="#{perfilUI.getEstiloCelda('Jueves', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Jueves', hora)}" escape="false"/>
+                                    </td>
+                                    <td style="#{perfilUI.getEstiloCelda('Viernes', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Viernes', hora)}" escape="false"/>
+                                    </td>
+                                    <td style="#{perfilUI.getEstiloCelda('Sabado', hora)}">
+                                        <h:outputText value="#{perfilUI.getHorarioCeldaValor('Sabado', hora)}" escape="false"/>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
                     </table>
                 </div>
             </p:tab>
+
+            <!-- Tab: Mis Materias -->
             <p:tab title="Mis Materias">
                 <div class="materias-panel">
                     <p:dataTable value="#{perfilUI.misAsignaciones}" var="ad"

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>SAUAP - Consulta de Asignaciones</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body { background: #f4f4f4; margin: 0; font-family: Arial, sans-serif; }
+        .topbar { background: #1b6b3a; color: #fff; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+        .topbar-left { display: flex; align-items: center; gap: 24px; }
+        .topbar-brand { font-weight: bold; font-size: 18px; letter-spacing: 1px; }
+        .topbar-nav { display: flex; gap: 4px; }
+        .nav-link { color: #cde8d4; text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 4px; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .topbar-user { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .badge-rol { background: #f0a500; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        .btn-logout { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); }
+        .divider { height: 3px; background: #28a745; }
+        .page-title { text-align: center; font-weight: bold; font-size: 20px; margin: 20px 0 8px; }
+        .title-divider { height: 2px; background: #28a745; margin: 0 20px 20px; }
+        .search-bar { display: flex; align-items: center; gap: 12px; padding: 12px 30px; background: #fff; border-radius: 6px; margin: 0 20px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .search-bar label { font-size: 13px; font-weight: bold; white-space: nowrap; }
+        .search-bar .ui-inputfield { border: 1px solid #ccc; border-radius: 14px; padding: 5px 12px; font-size: 13px; }
+        .btn-buscar { background: #1b6b3a; color: #fff; border: none; padding: 6px 18px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+        .btn-buscar:hover { background: #145230; }
+        .btn-limpiar { background: #bbb; color: #fff; border: none; padding: 6px 18px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+        .table-area { margin: 0 20px 30px; background: #fff; border-radius: 6px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    </style>
+</h:head>
+<h:body>
+    <!-- Header -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-brand">SAUAP</span>
+            <nav class="topbar-nav">
+                <a href="registroAsignatura.xhtml" class="nav-link">Asignaturas</a>
+                <a href="registroDocente.xhtml" class="nav-link">Docentes</a>
+                <a href="asignacionAsignatura.xhtml" class="nav-link">Asignacion</a>
+                <a href="consultaAsignaciones.xhtml" class="nav-link active">Consulta</a>
+                <a href="perfil.xhtml" class="nav-link">Perfil</a>
+            </nav>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-user">
+                <span>&#128100; #{loginUI.usuarioActual.nombreUsuario}</span>
+                <span class="badge-rol">#{loginUI.usuarioActual.rol}</span>
+            </div>
+            <h:form>
+                <p:commandButton value="Cerrar sesion" styleClass="btn-logout"
+                                 action="#{loginUI.logout()}" ajax="false"/>
+            </h:form>
+            <p:graphicImage url="resources/uabcl.png" style="height:36px;margin-left:8px;"/>
+        </div>
+    </div>
+    <div class="divider"/>
+
+    <div class="page-title">Consulta de Asignaciones</div>
+    <div class="title-divider"/>
+
+    <h:form id="formConsulta">
+        <!-- Barra de búsqueda -->
+        <div class="search-bar">
+            <label>Profesor / RFC:</label>
+            <p:inputText value="#{consultaUI.buscarProfesor}" placeholder="Buscar por nombre o RFC..."
+                         style="width:220px;"/>
+            <label>Asignatura:</label>
+            <p:inputText value="#{consultaUI.buscarAsignatura}" placeholder="Buscar por asignatura..."
+                         style="width:220px;"/>
+            <p:commandButton value="Buscar" styleClass="btn-buscar"
+                             action="#{consultaUI.buscar()}" update="tablaConsulta" process="@form"/>
+            <p:commandButton value="Limpiar" styleClass="btn-limpiar"
+                             action="#{consultaUI.limpiar()}" update="tablaConsulta @form" process="@this"/>
+        </div>
+
+        <!-- Tabla de resultados -->
+        <div class="table-area">
+            <p:dataTable id="tablaConsulta" value="#{consultaUI.filasFiltradas}" var="f"
+                         emptyMessage="No se encontraron asignaciones"
+                         styleClass="table table-bordered table-hover" style="width:100%"
+                         paginator="true" rows="15">
+                <p:column headerText="Profesor" sortBy="#{f.nombreProfesor}">
+                    <h:outputText value="#{f.nombreProfesor}"/>
+                </p:column>
+                <p:column headerText="RFC">
+                    <h:outputText value="#{f.rfc}"/>
+                </p:column>
+                <p:column headerText="Tipo Contrato">
+                    <h:outputText value="#{f.tipoContrato}"/>
+                </p:column>
+                <p:column headerText="Asignatura" sortBy="#{f.asignatura}">
+                    <h:outputText value="#{f.asignatura}"/>
+                </p:column>
+                <p:column headerText="Total Hrs">
+                    <h:outputText value="#{f.totalHoras}"/>
+                </p:column>
+                <p:column headerText="Dia">
+                    <h:outputText value="#{f.diaSemana}"/>
+                </p:column>
+                <p:column headerText="Inicio">
+                    <h:outputText value="#{f.horaInicio}"/>
+                </p:column>
+                <p:column headerText="Fin">
+                    <h:outputText value="#{f.horaFin}"/>
+                </p:column>
+                <p:column headerText="Aula">
+                    <h:outputText value="#{f.aula}"/>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+</h:body>
+</html>

@@ -1,12 +1,12 @@
 package ui;
 
-import helper.LoginHelper;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import mx.DC.entity.Usuario;
+import mx.DC.negocio.UsuarioService;
+import mx.DC.persistence.JPAUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,57 +15,52 @@ import java.io.Serializable;
 @SessionScoped
 public class LoginBeanUI implements Serializable {
 
-    private LoginHelper loginHelper;
-    private Usuario usuario;
-
-    public LoginBeanUI() {
-        loginHelper = new LoginHelper();
-    }
-
-    @PostConstruct
-    public void init() {
-        usuario = new Usuario();
-    }
+    private String nombreUsuario;
+    private String contrasena;
+    private Usuario usuarioActual;
 
     public void login() throws IOException {
-        if (usuario.getNombreUsuario() == null || usuario.getNombreUsuario().isEmpty()
-                || usuario.getContrasena() == null || usuario.getContrasena().isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Ingresa usuario y contraseña.", null));
-            return;
-        }
-
-        Usuario encontrado = loginHelper.Login(usuario.getNombreUsuario(), usuario.getContrasena());
-
-        if (encontrado != null && encontrado.getId() != null) {
-            usuario = encontrado;
-            String contextPath = FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequestContextPath();
-
-            // Redirigir según rol
-            if ("administrador".equalsIgnoreCase(usuario.getRol())) {
+        try {
+            // EntityManager fresco en cada intento para evitar estado estancado
+            UsuarioService svc = new UsuarioService(JPAUtil.getEntityManager());
+            Usuario u = svc.login(nombreUsuario, contrasena);
+            if (u != null) {
+                usuarioActual = u;
+                // Guardar en sesión HTTP para que el AuthFilter pueda leerlo
                 FacesContext.getCurrentInstance().getExternalContext()
-                        .redirect(contextPath + "/asignaturas.xhtml");
+                        .getSessionMap().put("usuarioLogueado", u);
+                String destino = u.esAdministrador() ? "/registroAsignatura.xhtml" : "/perfil.xhtml";
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .redirect(FacesContext.getCurrentInstance().getExternalContext()
+                                .getRequestContextPath() + destino);
             } else {
-                FacesContext.getCurrentInstance().getExternalContext()
-                        .redirect(contextPath + "/index.xhtml");
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Usuario o contrasena incorrectos", null));
             }
-        } else {
+        } catch (IOException ex) {
+            throw ex;
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Usuario o contraseña incorrectos.", "Intente de nuevo"));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error al iniciar sesion: " + ex.getMessage(), null));
         }
     }
 
     public void logout() throws IOException {
+        usuarioActual = null;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        String contextPath = FacesContext.getCurrentInstance()
-                .getExternalContext().getRequestContextPath();
         FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(contextPath + "/login.xhtml");
+                .redirect(FacesContext.getCurrentInstance().getExternalContext()
+                        .getRequestContextPath() + "/login.xhtml");
     }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public boolean isLoggedIn() { return usuarioActual != null; }
+
+    public String getNombreUsuario() { return nombreUsuario; }
+    public void setNombreUsuario(String v) { this.nombreUsuario = v; }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String v) { this.contrasena = v; }
+    public Usuario getUsuarioActual() { return usuarioActual; }
+    public void setUsuarioActual(Usuario v) { this.usuarioActual = v; }
 }

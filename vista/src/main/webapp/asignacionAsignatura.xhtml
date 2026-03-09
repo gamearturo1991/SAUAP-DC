@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>SAUAP - Asignacion Materias a Docentes</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body { background: #fff; font-family: Arial, sans-serif; margin: 0; }
+        .topbar { background: #1b6b3a; color: #fff; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+        .topbar-left { display: flex; align-items: center; gap: 24px; }
+        .topbar-brand { font-weight: bold; font-size: 18px; letter-spacing: 1px; }
+        .topbar-nav { display: flex; gap: 4px; }
+        .nav-link { color: #cde8d4; text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 4px; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .topbar-user { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .badge-rol { background: #f0a500; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        .btn-logout { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); }
+        .divider { height: 3px; background: #28a745; }
+        .page-title { text-align: center; font-weight: bold; font-size: 20px; margin: 20px 0 8px; }
+        .title-divider { height: 2px; background: #28a745; margin: 0 20px 20px; }
+        .panels { display: flex; gap: 20px; padding: 0 30px; }
+        .panel { flex: 1; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+        .panel-header {
+            background: #1b6b3a; color: #fff; padding: 10px 16px;
+            display: flex; align-items: center; justify-content: space-between;
+            font-weight: bold; font-size: 14px;
+        }
+        .panel-header .count { background: rgba(255,255,255,0.3); padding: 2px 10px; border-radius: 10px; font-size: 12px; }
+        .search-box { padding: 10px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 6px; }
+        .search-box .ui-inputfield { flex: 1; border: 1px solid #ccc; border-radius: 14px; padding: 5px 12px; font-size: 13px; }
+        .list-items { max-height: 320px; overflow-y: auto; }
+        .item-card {
+            padding: 12px 16px; border-bottom: 1px solid #f0f0f0;
+            cursor: pointer; transition: background 0.15s;
+        }
+        .item-card:hover { background: #f9f9f9; }
+        .item-card.selected { background: #1b3a7a; color: #fff; }
+        .item-card.selected .item-sub { color: #ccc; }
+        .item-title { font-weight: bold; font-size: 14px; }
+        .item-sub { font-size: 12px; color: #666; margin-top: 2px; }
+        .item-badge { float: right; font-size: 12px; font-weight: bold; }
+        .asignacion-section { padding: 20px 30px; border-top: 1px solid #eee; margin-top: 20px; width: 100%; }
+        .asignacion-section h4 { font-size: 14px; font-weight: bold; margin-bottom: 14px; }
+        .assign-row { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; width: 100%; }
+        .assign-field { display: flex; align-items: center; gap: 10px; flex: 1; }
+        .assign-field label { font-weight: bold; font-size: 14px; min-width: 70px; }
+        .assign-field .val { background: #e8e8e8; border-radius: 14px; padding: 5px 16px; font-size: 13px; flex: 1; min-width: 200px; }
+        .btn-aceptar { background: #f0a500; color: #fff; border: none; padding: 10px 40px; border-radius: 20px; font-size: 15px; font-weight: bold; cursor: pointer; display: block; margin: 20px auto 0; }
+        .btn-aceptar:hover { background: #d4920a; }
+    </style>
+</h:head>
+<h:body>
+    <!-- Header -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-brand">SAUAP</span>
+            <nav class="topbar-nav">
+                <a href="registroAsignatura.xhtml" class="nav-link">Asignaturas</a>
+                <a href="registroDocente.xhtml" class="nav-link">Docentes</a>
+                <a href="asignacionAsignatura.xhtml" class="nav-link active">Asignacion</a>
+                <a href="consultaAsignaciones.xhtml" class="nav-link">Consulta</a>
+                <a href="perfil.xhtml" class="nav-link">Perfil</a>
+            </nav>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-user">
+                <span>&#128100; #{loginUI.usuarioActual.nombreUsuario}</span>
+                <span class="badge-rol">#{loginUI.usuarioActual.rol}</span>
+            </div>
+            <h:form>
+                <p:commandButton value="Cerrar sesion" styleClass="btn-logout"
+                                 action="#{loginUI.logout()}" ajax="false"/>
+            </h:form>
+            <p:graphicImage url="resources/uabcl.png" style="height:36px;margin-left:8px;"/>
+        </div>
+    </div>
+    <div class="divider"/>
+
+    <h:form id="formAsignacion">
+        <p:messages id="msgs" showDetail="true" closable="true" style="margin:10px 30px 0;"/>
+        <div class="page-title">Asignacion Materias a Docentes</div>
+        <div class="title-divider"/>
+
+        <div class="panels">
+            <!-- Panel Profesores -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>&#128101; Profesores</span>
+                    <span class="count">#{asignacionUI.numProfesores} Disponibles</span>
+                </div>
+                <div class="search-box">
+                    <span>&#128269;</span>
+                    <p:inputText value="#{asignacionUI.filtroProfesores}" placeholder="Buscar profesor..."
+                                 onkeyup="submit()" style="flex:1;border:1px solid #ccc;border-radius:14px;padding:5px 12px;"/>
+                </div>
+                <div class="list-items">
+                    <p:dataList value="#{asignacionUI.profesoresFiltrados}" var="prof" type="none">
+                        <div class="item-card #{asignacionUI.profesorSeleccionado == prof ? 'selected' : ''}">
+                            <p:commandLink action="#{asignacionUI.seleccionarProfesor(prof)}"
+                                           update="@form" style="text-decoration:none;color:inherit;display:block;">
+                                <div class="item-title">
+                                    <h:outputText value="#{prof.getNombreCompleto()}"/>
+                                    <span class="item-badge"><h:outputText value="#{prof.rfc}"/></span>
+                                </div>
+                                <div class="item-sub">RFC: <h:outputText value="#{prof.rfc}"/></div>
+                            </p:commandLink>
+                        </div>
+                    </p:dataList>
+                </div>
+            </div>
+
+            <!-- Panel Asignaturas -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>&#128218; Asignaturas</span>
+                </div>
+                <div class="search-box">
+                    <span>&#128269;</span>
+                    <p:inputText value="#{asignacionUI.filtroAsignaturas}" placeholder="Buscar asignatura..."
+                                 onkeyup="submit()" style="flex:1;border:1px solid #ccc;border-radius:14px;padding:5px 12px;"/>
+                </div>
+                <div class="list-items">
+                    <p:dataList value="#{asignacionUI.asignaturasFiltradas}" var="asig" type="none">
+                        <div class="item-card #{asignacionUI.asignaturaSeleccionada == asig ? 'selected' : ''}">
+                            <p:commandLink action="#{asignacionUI.seleccionarAsignatura(asig)}"
+                                           update="@form" style="text-decoration:none;color:inherit;display:block;">
+                                <div class="item-title">
+                                    <h:outputText value="#{asig.nombre}"/>
+                                    <span class="item-badge">
+                                        <h:outputText value="#{asig.numHorasClase + asig.numHorasTaller + asig.numHorasLaboratorio}"/>hrs
+                                    </span>
+                                </div>
+                                <div class="item-sub">
+                                    Clase: <h:outputText value="#{asig.numHorasClase}"/>h
+                                    Taller: <h:outputText value="#{asig.numHorasTaller}"/>h
+                                    Lab: <h:outputText value="#{asig.numHorasLaboratorio}"/>h
+                                </div>
+                            </p:commandLink>
+                        </div>
+                    </p:dataList>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seccion de Asignacion -->
+        <div class="asignacion-section">
+            <h4>&#x2139;&#xfe0f; Asignacion</h4>
+
+            <!-- Profesor y Asignatura seleccionados -->
+            <div class="assign-row">
+                <div class="assign-field">
+                    <label>Profesor</label>
+                    <span class="val">
+                        <h:outputText value="#{asignacionUI.profesorSeleccionado != null ? asignacionUI.profesorSeleccionado.nombreCompleto : '—'}"/>
+                    </span>
+                </div>
+                <div class="assign-field">
+                    <label>Asignatura</label>
+                    <span class="val">
+                        <h:outputText value="#{asignacionUI.asignaturaSeleccionada != null ? asignacionUI.asignaturaSeleccionada.nombre : '—'}"/>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Horario -->
+            <div class="assign-row" style="margin-top:10px;border-top:1px solid #eee;padding-top:14px;">
+                <div class="assign-field">
+                    <label>Dia</label>
+                    <p:selectOneMenu value="#{asignacionUI.diaSemana}" style="border-radius:10px;flex:1;">
+                        <f:selectItem itemLabel="Lunes"     itemValue="Lunes"/>
+                        <f:selectItem itemLabel="Martes"    itemValue="Martes"/>
+                        <f:selectItem itemLabel="Miercoles" itemValue="Miercoles"/>
+                        <f:selectItem itemLabel="Jueves"    itemValue="Jueves"/>
+                        <f:selectItem itemLabel="Viernes"   itemValue="Viernes"/>
+                        <f:selectItem itemLabel="Sabado"    itemValue="Sabado"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="assign-field">
+                    <label>Hora inicio</label>
+                    <p:inputMask value="#{asignacionUI.horaInicio}" mask="99:99"
+                                 style="border-radius:10px;border:1px solid #ccc;padding:5px 12px;flex:1;"
+                                 placeholder="HH:mm"/>
+                </div>
+                <div class="assign-field">
+                    <label>Hora fin</label>
+                    <p:inputMask value="#{asignacionUI.horaFin}" mask="99:99"
+                                 style="border-radius:10px;border:1px solid #ccc;padding:5px 12px;flex:1;"
+                                 placeholder="HH:mm"/>
+                </div>
+                <div class="assign-field">
+                    <label>Aula</label>
+                    <p:inputText value="#{asignacionUI.aula}" maxlength="20"
+                                 style="border-radius:10px;border:1px solid #ccc;padding:5px 12px;flex:1;"
+                                 placeholder="Ej. A-101"/>
+                </div>
+            </div>
+
+            <p:commandButton value="Aceptar" styleClass="btn-aceptar"
+                             action="#{asignacionUI.aceptar()}" update="msgs @form"/>
+        </div>
+    </h:form>
+</h:body>
+</html>

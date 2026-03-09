@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>SAUAP - Registro de Docentes</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body { background: #fff; font-family: Arial, sans-serif; margin: 0; }
+        .topbar { background: #1b6b3a; color: #fff; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+        .topbar-left { display: flex; align-items: center; gap: 24px; }
+        .topbar-brand { font-weight: bold; font-size: 18px; letter-spacing: 1px; }
+        .topbar-nav { display: flex; gap: 4px; }
+        .nav-link { color: #cde8d4; text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 4px; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .topbar-user { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .badge-rol { background: #f0a500; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        .btn-logout { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); }
+        .divider { height: 3px; background: #28a745; }
+        .page-title { text-align: center; font-weight: bold; font-size: 20px; margin: 20px 0 8px; }
+        .title-divider { height: 2px; background: #28a745; margin: 0 20px 20px; }
+        .form-area { display: flex; gap: 30px; padding: 10px 30px 20px; }
+        .section { flex: 1; }
+        .section-header { font-weight: bold; font-size: 14px; color: #333; margin-bottom: 14px; }
+        .field-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .field-row label { width: 160px; font-size: 14px; font-weight: bold; flex-shrink: 0; }
+        .field-row .ui-inputfield { flex: 1; border: 1px solid #ccc; border-radius: 14px; padding: 5px 12px; }
+        .photo-placeholder {
+            width: 180px; height: 160px; background: #e0e0e0; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center; color: #999; font-size: 48px;
+        }
+        .btn-area { padding: 0 30px 20px; display: flex; gap: 10px; }
+        .btn-registrar { background: #1b6b3a; color: #fff; border: none; padding: 8px 28px; border-radius: 4px; font-size: 14px; cursor: pointer; }
+        .btn-registrar:hover { background: #145230; }
+        .btn-limpiar { background: #bbb; color: #fff; border: none; padding: 8px 28px; border-radius: 4px; font-size: 14px; cursor: pointer; }
+        .table-area { padding: 0 30px 30px; }
+    </style>
+</h:head>
+<h:body>
+    <!-- Header -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-brand">SAUAP</span>
+            <nav class="topbar-nav">
+                <a href="registroAsignatura.xhtml" class="nav-link">Asignaturas</a>
+                <a href="registroDocente.xhtml" class="nav-link active">Docentes</a>
+                <a href="asignacionAsignatura.xhtml" class="nav-link">Asignacion</a>
+                <a href="consultaAsignaciones.xhtml" class="nav-link">Consulta</a>
+                <a href="perfil.xhtml" class="nav-link">Perfil</a>
+            </nav>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-user">
+                <span>&#128100; #{loginUI.usuarioActual.nombreUsuario}</span>
+                <span class="badge-rol">#{loginUI.usuarioActual.rol}</span>
+            </div>
+            <h:form>
+                <p:commandButton value="Cerrar sesion" styleClass="btn-logout"
+                                 action="#{loginUI.logout()}" ajax="false"/>
+            </h:form>
+            <p:graphicImage url="resources/uabcl.png" style="height:36px;margin-left:8px;"/>
+        </div>
+    </div>
+    <div class="divider"/>
+
+    <h:form id="formDocente">
+        <p:messages id="msgs" showDetail="true" closable="true" style="margin:10px 30px 0;"/>
+        <div class="page-title">Registro de Docentes</div>
+        <div class="title-divider"/>
+
+        <div class="form-area">
+            <!-- Datos personales -->
+            <div class="section">
+                <div class="section-header">&#128100; Datos Personales</div>
+                <div class="field-row">
+                    <label>RFC</label>
+                    <p:inputText value="#{docenteUI.rfc}" maxlength="13" required="true"
+                                 requiredMessage="RFC obligatorio"/>
+                </div>
+                <div class="field-row">
+                    <label>Nombre</label>
+                    <p:inputText value="#{docenteUI.nombre}" maxlength="50" required="true"
+                                 requiredMessage="Nombre obligatorio"/>
+                </div>
+                <div class="field-row">
+                    <label>Apellido Paterno</label>
+                    <p:inputText value="#{docenteUI.apellidoPaterno}" maxlength="50" required="true"
+                                 requiredMessage="Apellido paterno obligatorio"/>
+                </div>
+                <div class="field-row">
+                    <label>Apellido Materno</label>
+                    <p:inputText value="#{docenteUI.apellidoMaterno}" maxlength="50" required="true"
+                                 requiredMessage="Apellido materno obligatorio"/>
+                </div>
+                <div class="field-row">
+                    <label>Tipo contrato</label>
+                    <p:selectOneMenu value="#{docenteUI.tipoContrato}" style="border-radius:14px;">
+                        <f:selectItem itemLabel="Planta" itemValue="planta"/>
+                        <f:selectItem itemLabel="Interino" itemValue="interino"/>
+                        <f:selectItem itemLabel="Tiempo completo" itemValue="tiempo_completo"/>
+                    </p:selectOneMenu>
+                </div>
+            </div>
+
+            <!-- Foto placeholder -->
+            <div style="display:flex;align-items:flex-start;padding-top:36px;">
+                <div class="photo-placeholder">&#128100;</div>
+            </div>
+        </div>
+
+        <div class="btn-area">
+            <p:commandButton value="Registrar" styleClass="btn-registrar"
+                             action="#{docenteUI.registrar()}" update="msgs tablaDocentes @form"/>
+            <p:commandButton value="Limpiar" styleClass="btn-limpiar"
+                             action="#{docenteUI.limpiar()}" update="@form" process="@this"/>
+        </div>
+
+        <!-- Tabla de docentes -->
+        <div class="table-area">
+            <p:dataTable id="tablaDocentes" value="#{docenteUI.docentes}" var="d"
+                         emptyMessage="No hay docentes registrados"
+                         styleClass="table table-bordered table-hover" style="width:100%"
+                         paginator="true" rows="10">
+                <p:column headerText="RFC">
+                    <h:outputText value="#{d.rfc}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{d.idPersona.nombre}"/>
+                </p:column>
+                <p:column headerText="Apellido Paterno">
+                    <h:outputText value="#{d.idPersona.apellidoPaterno}"/>
+                </p:column>
+                <p:column headerText="Apellido Materno">
+                    <h:outputText value="#{d.idPersona.apellidoMaterno}"/>
+                </p:column>
+                <p:column headerText="Tipo Contrato">
+                    <h:outputText value="#{d.tipoContrato}"/>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+</h:body>
+</html>

@@ -1,16 +1,15 @@
 package helper;
 
 import mx.DC.entity.Usuario;
-import mx.DC.integration.ServiceFacadeLocator;
+import mx.DC.negocio.UsuarioService;
+import mx.DC.persistence.JPAUtil;
 
 import java.io.Serializable;
 
 public class LoginHelper implements Serializable {
 
-    /**
-     * Login: busca el usuario por nombreUsuario y verifica contraseña
-     */
     public Usuario Login(String nombreUsuario, String password) {
-        return ServiceFacadeLocator.getInstanceFacadeUsuario().login(nombreUsuario, password);
+        UsuarioService service = new UsuarioService(JPAUtil.getEntityManager());
+        return service.login(nombreUsuario, password);
     }
 }

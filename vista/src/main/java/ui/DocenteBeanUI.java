@@ -20,6 +20,7 @@ public class DocenteBeanUI implements Serializable {
 
     private String rfc;
     private String nombre;
+    private String segundoNombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String tipoContrato = "planta";
@@ -43,10 +44,11 @@ public class DocenteBeanUI implements Serializable {
 
     public void registrar() {
         try {
+            String nombreCompuesto = componerNombre();
             if (crearUsuario) {
                 profesorService.registrarDocenteConUsuario(
                         rfc,
-                        nombre,
+                        nombreCompuesto,
                         apellidoPaterno,
                         apellidoMaterno,
                         tipoContrato,
@@ -55,7 +57,7 @@ public class DocenteBeanUI implements Serializable {
                         confirmacionContrasena
                 );
             } else {
-                profesorService.registrarDocente(rfc, nombre, apellidoPaterno, apellidoMaterno, tipoContrato);
+                profesorService.registrarDocente(rfc, nombreCompuesto, apellidoPaterno, apellidoMaterno, tipoContrato);
             }
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Docente registrado correctamente", null));
@@ -70,6 +72,7 @@ public class DocenteBeanUI implements Serializable {
     public void limpiar() {
         rfc = null;
         nombre = null;
+        segundoNombre = null;
         apellidoPaterno = null;
         apellidoMaterno = null;
         tipoContrato = "planta";
@@ -89,11 +92,22 @@ public class DocenteBeanUI implements Serializable {
                 && loginUI.getUsuarioActual().esAdministrador();
     }
 
+    private String componerNombre() {
+        String n1 = nombre == null ? "" : nombre.trim();
+        String n2 = segundoNombre == null ? "" : segundoNombre.trim();
+        if (n1.isEmpty()) {
+            return "";
+        }
+        return n2.isEmpty() ? n1 : (n1 + " " + n2);
+    }
+
     // Getters / Setters
     public String getRfc() { return rfc; }
     public void setRfc(String v) { this.rfc = v; }
     public String getNombre() { return nombre; }
     public void setNombre(String v) { this.nombre = v; }
+    public String getSegundoNombre() { return segundoNombre; }
+    public void setSegundoNombre(String segundoNombre) { this.segundoNombre = segundoNombre; }
     public String getApellidoPaterno() { return apellidoPaterno; }
     public void setApellidoPaterno(String v) { this.apellidoPaterno = v; }
     public String getApellidoMaterno() { return apellidoMaterno; }

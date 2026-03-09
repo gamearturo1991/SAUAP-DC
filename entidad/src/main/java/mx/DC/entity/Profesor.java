@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "profesor")
 public class Profesor {
@@ -46,4 +49,9 @@ public class Profesor {
         this.rfc = rfc;
     }
 
+    @OneToMany(mappedBy = "idProfesor")
+    private List<AsignacionDocente> asignaciones = new ArrayList<>();
+
+    public List<AsignacionDocente> getAsignaciones() { return asignaciones; }
+    public void setAsignaciones(List<AsignacionDocente> asignaciones) { this.asignaciones = asignaciones; }
 }
